@@ -1,16 +1,16 @@
 "--endian=little" 
 
-"--cpu=Cortex-M4" 
+"--cpu=Cortex-M3" 
 
-"--fpu=VFPv4_SP" 
+"--fpu=None" 
 
 "-p" 
 
-"F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.4\arm\CONFIG\debugger\ST\STM32F401CB.ddf" 
+"F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.4\arm\CONFIG\debugger\ST\STM32F103RC.ddf" 
 
 "--semihosting" 
 
-"--device=STM32F401CB" 
+"--device=STM32F103RC" 
 
 "--drv_communication=USB0" 
 

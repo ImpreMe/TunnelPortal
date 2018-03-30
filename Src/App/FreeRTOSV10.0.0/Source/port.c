@@ -27,7 +27,7 @@
  */
 
 /*-----------------------------------------------------------
- * Implementation of functions defined in portable.h for the ARM CM4F port.
+ * Implementation of functions defined in portable.h for the ARM CM3 port.
  *----------------------------------------------------------*/
 
 /* IAR includes. */
@@ -36,10 +36,6 @@
 /* Scheduler includes. */
 #include "FreeRTOS.h"
 #include "task.h"
-
-#ifndef __ARMVFP__
-	#error This port can only be used when the project options are configured to enable hardware floating point support.
-#endif
 
 #if( configMAX_SYSCALL_INTERRUPT_PRIORITY == 0 )
 	#error configMAX_SYSCALL_INTERRUPT_PRIORITY must not be set to 0.  See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html
@@ -67,12 +63,6 @@
 #define portNVIC_PENDSVCLEAR_BIT 			( 1UL << 27UL )
 #define portNVIC_PEND_SYSTICK_CLEAR_BIT		( 1UL << 25UL )
 
-/* Constants used to detect a Cortex-M7 r0p1 core, which should use the ARM_CM7
-r0p1 port. */
-#define portCPUID							( * ( ( volatile uint32_t * ) 0xE000ed00 ) )
-#define portCORTEX_M7_r0p1_ID				( 0x410FC271UL )
-#define portCORTEX_M7_r0p0_ID				( 0x410FC270UL )
-
 #define portNVIC_PENDSV_PRI					( ( ( uint32_t ) configKERNEL_INTERRUPT_PRIORITY ) << 16UL )
 #define portNVIC_SYSTICK_PRI				( ( ( uint32_t ) configKERNEL_INTERRUPT_PRIORITY ) << 24UL )
 
@@ -89,13 +79,8 @@ r0p1 port. */
 /* Masks off all bits but the VECTACTIVE bits in the ICSR register. */
 #define portVECTACTIVE_MASK					( 0xFFUL )
 
-/* Constants required to manipulate the VFP. */
-#define portFPCCR							( ( volatile uint32_t * ) 0xe000ef34 ) /* Floating point context control register. */
-#define portASPEN_AND_LSPEN_BITS			( 0x3UL << 30UL )
-
 /* Constants required to set up the initial stack. */
 #define portINITIAL_XPSR					( 0x01000000 )
-#define portINITIAL_EXC_RETURN				( 0xfffffffd )
 
 /* The systick is a 24-bit counter. */
 #define portMAX_24_BIT_NUMBER				( 0xffffffUL )
@@ -108,6 +93,13 @@ calculations. */
 /* For strict compliance with the Cortex-M spec the task start address should
 have bit-0 clear, as it is loaded into the PC on exit from an ISR. */
 #define portSTART_ADDRESS_MASK				( ( StackType_t ) 0xfffffffeUL )
+
+/* For backward compatibility, ensure configKERNEL_INTERRUPT_PRIORITY is
+defined.  The value 255 should also ensure backward compatibility.
+FreeRTOS.org versions prior to V4.3.0 did not include this definition. */
+#ifndef configKERNEL_INTERRUPT_PRIORITY
+	#define configKERNEL_INTERRUPT_PRIORITY 255
+#endif
 
 /*
  * Setup the timer to generate the tick interrupts.  The implementation in this
@@ -125,11 +117,6 @@ void xPortSysTickHandler( void );
  * Start first task is a separate function so it can be tested in isolation.
  */
 extern void vPortStartFirstTask( void );
-
-/*
- * Turn the VFP on.
- */
-extern void vPortEnableVFP( void );
 
 /*
  * Used to catch tasks that attempt to return from their implementing function.
@@ -185,26 +172,14 @@ StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t px
 {
 	/* Simulate the stack frame as it would be created by a context switch
 	interrupt. */
-
-	/* Offset added to account for the way the MCU uses the stack on entry/exit
-	of interrupts, and to ensure alignment. */
-	pxTopOfStack--;
-
+	pxTopOfStack--; /* Offset added to account for the way the MCU uses the stack on entry/exit of interrupts. */
 	*pxTopOfStack = portINITIAL_XPSR;	/* xPSR */
 	pxTopOfStack--;
 	*pxTopOfStack = ( ( StackType_t ) pxCode ) & portSTART_ADDRESS_MASK;	/* PC */
 	pxTopOfStack--;
 	*pxTopOfStack = ( StackType_t ) prvTaskExitError;	/* LR */
-
-	/* Save code space by skipping register initialisation. */
 	pxTopOfStack -= 5;	/* R12, R3, R2 and R1. */
 	*pxTopOfStack = ( StackType_t ) pvParameters;	/* R0 */
-
-	/* A save method is being used that requires each task to maintain its
-	own exec return value. */
-	pxTopOfStack--;
-	*pxTopOfStack = portINITIAL_EXC_RETURN;
-
 	pxTopOfStack -= 8;	/* R11, R10, R9, R8, R7, R6, R5 and R4. */
 
 	return pxTopOfStack;
@@ -233,12 +208,6 @@ BaseType_t xPortStartScheduler( void )
 	/* configMAX_SYSCALL_INTERRUPT_PRIORITY must not be set to 0.
 	See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html */
 	configASSERT( configMAX_SYSCALL_INTERRUPT_PRIORITY );
-
-	/* This port can be used on all revisions of the Cortex-M7 core other than
-	the r0p1 parts.  r0p1 parts should use the port from the
-	/source/portable/GCC/ARM_CM7/r0p1 directory. */
-	configASSERT( portCPUID != portCORTEX_M7_r0p1_ID );
-	configASSERT( portCPUID != portCORTEX_M7_r0p0_ID );
 
 	#if( configASSERT_DEFINED == 1 )
 	{
@@ -312,12 +281,6 @@ BaseType_t xPortStartScheduler( void )
 
 	/* Initialise the critical nesting count ready for the first task. */
 	uxCriticalNesting = 0;
-
-	/* Ensure the VFP is enabled - it should be anyway. */
-	vPortEnableVFP();
-
-	/* Lazy save always. */
-	*( portFPCCR ) |= portASPEN_AND_LSPEN_BITS;
 
 	/* Start the first task. */
 	vPortStartFirstTask();

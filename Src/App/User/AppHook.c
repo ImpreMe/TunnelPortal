@@ -2,7 +2,7 @@
 #include "task.h"
 
 //#include "dhcp.h"
-#include "stm32f4xx_hal.h"
+#include "stm32f1xx_hal.h"
 
 //#include "mqtt_interface.h"
 void vApplicationTickHook( void )

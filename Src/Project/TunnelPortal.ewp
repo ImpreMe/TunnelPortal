@@ -89,7 +89,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>STM32F401CB	ST STM32F401CB</state>
+          <state>STM32F103RC	ST STM32F103RC</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -128,7 +128,7 @@
         <option>
           <name>GBECoreSlave</name>
           <version>24</version>
-          <state>39</state>
+          <state>38</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
@@ -145,21 +145,21 @@
         <option>
           <name>CoreVariant</name>
           <version>24</version>
-          <state>39</state>
+          <state>38</state>
         </option>
         <option>
           <name>GFPUDeviceSlave</name>
-          <state>STM32F401CB	ST STM32F401CB</state>
+          <state>STM32F103RC	ST STM32F103RC</state>
         </option>
         <option>
           <name>FPU2</name>
           <version>0</version>
-          <state>4</state>
+          <state>0</state>
         </option>
         <option>
           <name>NrRegs</name>
           <version>0</version>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>NEON</name>
@@ -168,7 +168,7 @@
         <option>
           <name>GFPUCoreSlave2</name>
           <version>24</version>
-          <state>39</state>
+          <state>38</state>
         </option>
       </data>
     </settings>
@@ -181,10 +181,8 @@
         <debug>1</debug>
         <option>
           <name>CCDefines</name>
-          <state>STM32F401xC</state>
+          <state>STM32F103xE</state>
           <state>USE_HAL_DRIVER</state>
-          <state>USE_USB_OTG_FS</state>
-          <state>MQTT_TASK</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -315,25 +313,12 @@
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\..\App\CMSIS\Device\Include</state>
           <state>$PROJ_DIR$\..\App\CMSIS\Include</state>
-          <state>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc</state>
           <state>$PROJ_DIR$\..\App\User</state>
           <state>$PROJ_DIR$\..\App\BSP\Include</state>
           <state>$PROJ_DIR$\..\App\FreeRTOSV10.0.0\Include</state>
-          <state>$PROJ_DIR$\..\App\Ethernet</state>
-          <state>$PROJ_DIR$\..\App\MQTT</state>
-          <state>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src</state>
-          <state>$PROJ_DIR$\..\App\SoftI2C</state>
-          <state>$PROJ_DIR$\..\App\EEPROM</state>
-          <state>$PROJ_DIR$\..\App\sFlash</state>
-          <state>$PROJ_DIR$\..\App\USB\USB_APP</state>
-          <state>$PROJ_DIR$\..\App\USB\USB_Device\Class\HID</state>
-          <state>$PROJ_DIR$\..\App\USB\USB_Device\Library</state>
-          <state>$PROJ_DIR$\..\App\USB\USB_Drivers</state>
-          <state>$PROJ_DIR$\..\App\RingBuffer</state>
-          <state>$PROJ_DIR$\..\App\USB\USB_Device\Class\CustomHID</state>
-          <state>$PROJ_DIR$\..\App\Ethernet</state>
-          <state>$PROJ_DIR$\..\App\Ethernet\W5500</state>
-          <state>$PROJ_DIR$\..\App\DHCP</state>
+          <state>$PROJ_DIR$\..\App\CarCheck</state>
+          <state>$PROJ_DIR$\..\App\Uart</state>
+          <state>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -748,7 +733,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$PROJ_DIR$\..\App\CMSIS\Device\Source\Templates\iar\linker\stm32f401xc_flash.icf</state>
+          <state>$PROJ_DIR$\..\App\CMSIS\Device\Source\Templates\iar\linker\stm32f103xe_flash.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -1995,141 +1980,30 @@
     </group>
   </group>
   <group>
+    <name>Check</name>
+    <file>
+      <name>$PROJ_DIR$\..\App\CarCheck\check.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\CarCheck\check.h</name>
+    </file>
+  </group>
+  <group>
     <name>CMSIS</name>
-    <group>
-      <name>Device</name>
-      <group>
-        <name>Include</name>
-        <file>
-          <name>$PROJ_DIR$\..\App\CMSIS\Device\Include\stm32f401xc.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\App\CMSIS\Device\Include\stm32f4xx.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\App\CMSIS\Device\Include\system_stm32f4xx.h</name>
-        </file>
-      </group>
-      <group>
-        <name>Source</name>
-        <file>
-          <name>$PROJ_DIR$\..\App\CMSIS\Device\Source\Templates\iar\startup_stm32f401xc.s</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\App\CMSIS\Device\Source\Templates\system_stm32f4xx.c</name>
-        </file>
-      </group>
-    </group>
-    <group>
-      <name>Include</name>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\arm_common_tables.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\arm_const_structs.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\arm_math.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\cmsis_armcc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\cmsis_armcc_V6.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\cmsis_gcc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\core_cm0.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\core_cm0plus.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\core_cm3.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\core_cm4.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\core_cm7.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\core_cmFunc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\core_cmInstr.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\core_cmSimd.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\core_sc000.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\CMSIS\Include\core_sc300.h</name>
-      </file>
-    </group>
-  </group>
-  <group>
-    <name>DHCP</name>
-    <excluded>
-      <configuration>Debug</configuration>
-    </excluded>
     <file>
-      <name>$PROJ_DIR$\..\App\DHCP\dhcp.c</name>
+      <name>$PROJ_DIR$\..\App\CMSIS\Device\Source\Templates\iar\startup_stm32f103xe.s</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\DHCP\dhcp.h</name>
-    </file>
-  </group>
-  <group>
-    <name>EEPROM</name>
-    <excluded>
-      <configuration>Debug</configuration>
-    </excluded>
-    <file>
-      <name>$PROJ_DIR$\..\App\EEPROM\EEPROM.c</name>
+      <name>$PROJ_DIR$\..\App\CMSIS\Device\Include\stm32f103xe.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\EEPROM\EEPROM.h</name>
+      <name>$PROJ_DIR$\..\App\CMSIS\Device\Include\stm32f1xx.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\EEPROM\EEPROM_port.h</name>
+      <name>$PROJ_DIR$\..\App\CMSIS\Device\Source\Templates\system_stm32f1xx.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\EEPROM\EEPROM_test.c</name>
-      <excluded>
-        <configuration>Debug</configuration>
-      </excluded>
-    </file>
-  </group>
-  <group>
-    <name>Ethernet</name>
-    <excluded>
-      <configuration>Debug</configuration>
-    </excluded>
-    <group>
-      <name>W5500</name>
-      <file>
-        <name>$PROJ_DIR$\..\App\Ethernet\W5500\w5500.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\Ethernet\W5500\w5500.h</name>
-      </file>
-    </group>
-    <file>
-      <name>$PROJ_DIR$\..\App\Ethernet\socket.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\Ethernet\socket.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\Ethernet\wizchip_conf.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\Ethernet\wizchip_conf.h</name>
+      <name>$PROJ_DIR$\..\App\CMSIS\Device\Include\system_stm32f1xx.h</name>
     </file>
   </group>
   <group>
@@ -2226,757 +2100,412 @@
     </group>
   </group>
   <group>
-    <name>MQTT</name>
-    <excluded>
-      <configuration>Debug</configuration>
-    </excluded>
+    <name>STM32F1xx_HAL_Driver</name>
     <group>
-      <name>MQTTPacket</name>
+      <name>inc</name>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTConnect.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTConnectClient.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_adc.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTConnectServer.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_adc_ex.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTDeserializePublish.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_can.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTFormat.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_can_ex.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTFormat.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_cec.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTPacket.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_conf_template.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTPacket.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_cortex.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTPublish.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_crc.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTSerializePublish.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_dac.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTSubscribe.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_dac_ex.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTSubscribeClient.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_def.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTSubscribeServer.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_dma.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTUnsubscribe.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_dma_ex.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTUnsubscribeClient.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_eth.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\MQTTUnsubscribeServer.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_flash.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\MQTT\MQTTPacket\src\StackTrace.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_flash_ex.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_gpio.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_gpio_ex.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_hcd.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_i2c.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_i2s.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_irda.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_iwdg.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_mmc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_nand.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_nor.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pccard.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pcd.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pcd_ex.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pwr.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc_ex.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rtc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rtc_ex.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_sd.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_smartcard.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_spi.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_sram.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_tim.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_tim_ex.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_uart.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_usart.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_wwdg.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_adc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_bus.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_cortex.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_crc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_dac.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_dma.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_exti.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_fsmc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_gpio.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_i2c.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_iwdg.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_pwr.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_rcc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_rtc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_sdmmc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_spi.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_system.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_tim.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_usart.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_usb.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_utils.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_wwdg.h</name>
       </file>
     </group>
-    <file>
-      <name>$PROJ_DIR$\..\App\MQTT\mqtt_interface.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\MQTT\mqtt_interface.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\MQTT\MQTTClient.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\MQTT\MQTTClient.h</name>
-    </file>
-  </group>
-  <group>
-    <name>RingBuffer</name>
-    <excluded>
-      <configuration>Debug</configuration>
-    </excluded>
-    <file>
-      <name>$PROJ_DIR$\..\App\RingBuffer\ringbuffer.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\RingBuffer\ringbuffer.h</name>
-    </file>
-  </group>
-  <group>
-    <name>sFlash</name>
-    <excluded>
-      <configuration>Debug</configuration>
-    </excluded>
-    <file>
-      <name>$PROJ_DIR$\..\App\sFlash\sFlash.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\sFlash\sFlash.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\sFlash\sFlash_port.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\sFlash\sFlash_port.h</name>
-    </file>
-  </group>
-  <group>
-    <name>SoftIIC</name>
-    <excluded>
-      <configuration>Debug</configuration>
-    </excluded>
-    <file>
-      <name>$PROJ_DIR$\..\App\SoftI2C\SoftI2C.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\SoftI2C\SoftI2C.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\SoftI2C\SoftI2C_port.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\SoftI2C\SoftI2C_port.h</name>
-    </file>
-  </group>
-  <group>
-    <name>STM32F4xx_HAL_Driver</name>
     <group>
-      <name>Inc</name>
+      <name>src</name>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc_ex.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_can.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_can.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cec.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cec.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_conf_template.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_crc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dac.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dac_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dma.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_eth.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_hcd.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_i2c.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_i2s.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_irda.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_iwdg.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_mmc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_msp_template.c</name>
         <excluded>
           <configuration>Debug</configuration>
         </excluded>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_nand.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_crc.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_nor.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cryp.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pccard.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cryp_ex.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pcd.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dac.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pcd_ex.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dac_ex.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pwr.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dcmi.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dcmi_ex.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rtc.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dfsdm.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rtc_ex.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_sd.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma2d.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_smartcard.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_spi.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dsi.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_spi_ex.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_eth.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_sram.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_fmpi2c.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_fmpi2c_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hash.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hash_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2s.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2s_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_irda.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_iwdg.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_lptim.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_ltdc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_ltdc_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_nand.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_nor.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pccard.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_qspi.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rng.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rtc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rtc_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sai.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sai_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sd.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sdram.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_smartcard.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spdifrx.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sram.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_usart.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_wwdg.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_adc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_bus.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_cortex.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_crc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_dac.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_dma.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_dma2d.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_exti.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_fmc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_fsmc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_gpio.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_i2c.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_iwdg.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_lptim.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_pwr.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_rcc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_rng.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_rtc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_sdmmc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_spi.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_system.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_tim.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usart.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_utils.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_wwdg.h</name>
-      </file>
-    </group>
-    <group>
-      <name>Src</name>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_can.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cec.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_crc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cryp.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cryp_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dac.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dac_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dcmi.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dcmi_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dfsdm.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma2d.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dsi.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_eth.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ramfunc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_fmpi2c.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_fmpi2c_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_hash.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_hash_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_hcd.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2s.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2s_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_irda.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_iwdg.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_lptim.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_mmc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_msp_template.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_timebase_rtc_alarm_template.c</name>
         <excluded>
           <configuration>Debug</configuration>
         </excluded>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_nand.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_nor.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pccard.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_qspi.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rng.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sai.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sai_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sd.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sdram.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_smartcard.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spdifrx.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spi.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sram.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_timebase_rtc_alarm_template.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_timebase_tim_template.c</name>
         <excluded>
           <configuration>Debug</configuration>
         </excluded>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_timebase_rtc_wakeup_template.c</name>
-        <excluded>
-          <configuration>Debug</configuration>
-        </excluded>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_timebase_tim_template.c</name>
-        <excluded>
-          <configuration>Debug</configuration>
-        </excluded>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_usart.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_wwdg.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_usart.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_adc.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_wwdg.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_crc.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_adc.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_dac.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_crc.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_dma.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_dac.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_exti.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_dma.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_fsmc.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_dma2d.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_gpio.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_exti.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_i2c.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_pwr.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fsmc.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_rcc.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_gpio.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_rtc.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_i2c.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_sdmmc.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_lptim.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_spi.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_pwr.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_tim.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_rcc.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_usart.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_rng.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_usb.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_rtc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_sdmmc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_spi.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_tim.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usart.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_utils.c</name>
+        <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_utils.c</name>
       </file>
     </group>
   </group>
   <group>
-    <name>USB</name>
-    <excluded>
-      <configuration>Debug</configuration>
-    </excluded>
-    <group>
-      <name>USB_APP</name>
-      <file>
-        <name>$PROJ_DIR$\..\App\USB\USB_APP\usb_bsp.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\USB\USB_APP\usbd_desc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\USB\USB_APP\usbd_usr.c</name>
-      </file>
-    </group>
-    <group>
-      <name>USB_Device</name>
-      <group>
-        <name>Class</name>
-        <group>
-          <name>CustomHID</name>
-          <file>
-            <name>$PROJ_DIR$\..\App\USB\USB_Device\Class\CustomHID\usbd_customhid_core.c</name>
-          </file>
-        </group>
-        <group>
-          <name>HID</name>
-          <excluded>
-            <configuration>Debug</configuration>
-          </excluded>
-          <file>
-            <name>$PROJ_DIR$\..\App\USB\USB_Device\Class\HID\usbd_hid_core.c</name>
-          </file>
-        </group>
-      </group>
-      <group>
-        <name>Library</name>
-        <file>
-          <name>$PROJ_DIR$\..\App\USB\USB_Device\Library\usbd_core.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\App\USB\USB_Device\Library\usbd_ioreq.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\App\USB\USB_Device\Library\usbd_req.c</name>
-        </file>
-      </group>
-    </group>
-    <group>
-      <name>USB_Drivers</name>
-      <file>
-        <name>$PROJ_DIR$\..\App\USB\USB_Drivers\usb_core.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\USB\USB_Drivers\usb_dcd.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\App\USB\USB_Drivers\usb_dcd_int.c</name>
-      </file>
-    </group>
+    <name>UART</name>
+    <file>
+      <name>$PROJ_DIR$\..\App\Uart\Uart.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\Uart\Uart.h</name>
+    </file>
   </group>
   <group>
     <name>User</name>
@@ -2993,10 +2522,7 @@
       <name>$PROJ_DIR$\..\App\User\main.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\User\mqtt.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\User\stm32f4xx_hal_conf.h</name>
+      <name>$PROJ_DIR$\..\App\User\stm32f1xx_hal_conf.h</name>
     </file>
   </group>
 </project>

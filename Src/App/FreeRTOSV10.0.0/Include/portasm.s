@@ -37,7 +37,7 @@
 	PUBLIC xPortPendSVHandler
 	PUBLIC vPortSVCHandler
 	PUBLIC vPortStartFirstTask
-	PUBLIC vPortEnableVFP
+
 
 
 /*-----------------------------------------------------------*/
@@ -45,22 +45,13 @@
 xPortPendSVHandler:
 	mrs r0, psp
 	isb
-	/* Get the location of the current TCB. */
-	ldr	r3, =pxCurrentTCB
+	ldr	r3, =pxCurrentTCB			/* Get the location of the current TCB. */
 	ldr	r2, [r3]
 
-	/* Is the task using the FPU context?  If so, push high vfp registers. */
-	tst r14, #0x10
-	it eq
-	vstmdbeq r0!, {s16-s31}
+	stmdb r0!, {r4-r11}				/* Save the remaining registers. */
+	str r0, [r2]					/* Save the new top of stack into the first member of the TCB. */
 
-	/* Save the core registers. */
-	stmdb r0!, {r4-r11, r14}
-
-	/* Save the new top of stack into the first member of the TCB. */
-	str r0, [r2]
-
-	stmdb sp!, {r0, r3}
+	stmdb sp!, {r3, r14}
 	mov r0, #configMAX_SYSCALL_INTERRUPT_PRIORITY
 	msr basepri, r0
 	dsb
@@ -68,30 +59,13 @@ xPortPendSVHandler:
 	bl vTaskSwitchContext
 	mov r0, #0
 	msr basepri, r0
-	ldmia sp!, {r0, r3}
+	ldmia sp!, {r3, r14}
 
-	/* The first item in pxCurrentTCB is the task top of stack. */
 	ldr r1, [r3]
-	ldr r0, [r1]
-
-	/* Pop the core registers. */
-	ldmia r0!, {r4-r11, r14}
-
-	/* Is the task using the FPU context?  If so, pop the high vfp registers
-	too. */
-	tst r14, #0x10
-	it eq
-	vldmiaeq r0!, {s16-s31}
-
+	ldr r0, [r1]					/* The first item in pxCurrentTCB is the task top of stack. */
+	ldmia r0!, {r4-r11}				/* Pop the registers. */
 	msr psp, r0
 	isb
-	#ifdef WORKAROUND_PMU_CM001 /* XMC4000 specific errata */
-		#if WORKAROUND_PMU_CM001 == 1
-			push { r14 }
-			pop { pc }
-		#endif
-	#endif
-
 	bx r14
 
 
@@ -103,11 +77,12 @@ vPortSVCHandler:
 	ldr r1, [r3]
 	ldr r0, [r1]
 	/* Pop the core registers. */
-	ldmia r0!, {r4-r11, r14}
+	ldmia r0!, {r4-r11}
 	msr psp, r0
 	isb
 	mov r0, #0
 	msr	basepri, r0
+	orr r14, r14, #13
 	bx r14
 
 /*-----------------------------------------------------------*/
@@ -119,32 +94,11 @@ vPortStartFirstTask
 	ldr r0, [r0]
 	/* Set the msp back to the start of the stack. */
 	msr msp, r0
-	/* Clear the bit that indicates the FPU is in use in case the FPU was used
-	before the scheduler was started - which would otherwise result in the
-	unnecessary leaving of space in the SVC stack for lazy saving of FPU
-	registers. */
-	mov r0, #0
-	msr control, r0
-	/* Call SVC to start the first task. */
+	/* Call SVC to start the first task, ensuring interrupts are enabled. */
 	cpsie i
 	cpsie f
 	dsb
 	isb
 	svc 0
 
-/*-----------------------------------------------------------*/
-
-vPortEnableVFP:
-	/* The FPU enable bits are in the CPACR. */
-	ldr.w r0, =0xE000ED88
-	ldr	r1, [r0]
-
-	/* Enable CP10 and CP11 coprocessors, then save back. */
-	orr	r1, r1, #( 0xf << 20 )
-	str r1, [r0]
-	bx	r14
-
-
-
 	END
-
