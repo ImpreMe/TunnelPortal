@@ -51,7 +51,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 		HAL_NVIC_EnableIRQ(USART1_IRQn);
 			
 		
-		
 		__HAL_RCC_TIM2_CLK_ENABLE();
 		htim2.Instance = TIM2;
 		htim2.Init.Prescaler = 84000 - 1; //定时器2再APB1总线上，时钟频率84MHz,分频都时钟为1K
@@ -83,8 +82,6 @@ void USART1_IRQHandler(void)
 			rx_index = 0;
 		__HAL_TIM_SET_COUNTER(&htim2, 0);
     }
-	
-	
 }
 
 void TIM2_IRQHandler(void)
@@ -100,11 +97,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		if(rx_index != 0)
 		{
 			light = rx_buf[5] << 8 | rx_buf[6];
-			rx_index = 0;			
-			//HAL_UART_Transmit(&huart1, (uint8_t*)"rece", 4, 100);
+			rx_index = 0;
 			__HAL_TIM_SET_COUNTER(&htim2, 0);
 		}
-
 	}
 }
 uint32_t GetLight(void)
