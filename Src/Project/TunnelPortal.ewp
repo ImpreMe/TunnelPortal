@@ -319,6 +319,9 @@
           <state>$PROJ_DIR$\..\App\CarCheck</state>
           <state>$PROJ_DIR$\..\App\Uart</state>
           <state>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Inc</state>
+          <state>$PROJ_DIR$\..\App\DIDO</state>
+          <state>$PROJ_DIR$\..\App\SoftI2C</state>
+          <state>$PROJ_DIR$\..\App\EEPROM</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -2007,6 +2010,27 @@
     </file>
   </group>
   <group>
+    <name>DIDO</name>
+    <file>
+      <name>$PROJ_DIR$\..\App\DIDO\dido.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\DIDO\dido.h</name>
+    </file>
+  </group>
+  <group>
+    <name>EEPROM</name>
+    <file>
+      <name>$PROJ_DIR$\..\App\EEPROM\EEPROM.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\EEPROM\EEPROM.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\EEPROM\EEPROM_port.h</name>
+    </file>
+  </group>
+  <group>
     <name>FreeRTOS</name>
     <group>
       <name>Include</name>
@@ -2098,6 +2122,21 @@
         <name>$PROJ_DIR$\..\App\FreeRTOSV10.0.0\Source\timers.c</name>
       </file>
     </group>
+  </group>
+  <group>
+    <name>SoftIIC</name>
+    <file>
+      <name>$PROJ_DIR$\..\App\SoftI2C\SoftI2C.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\SoftI2C\SoftI2C.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\SoftI2C\SoftI2C_port.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\SoftI2C\SoftI2C_port.h</name>
+    </file>
   </group>
   <group>
     <name>STM32F1xx_HAL_Driver</name>
