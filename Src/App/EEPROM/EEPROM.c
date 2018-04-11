@@ -34,7 +34,7 @@ uint8_t EEPROM_Write(uint32_t addr, const void* buf, uint16_t len)
 	uint8_t  tx_buf[EEPROM_DATA_ADDR_BYTES + EEPROM_PAGE_SIZE];		
 	
 	while (need_len > 0)
-	{		
+	{
 		// fill addr
 		for (uint8_t i = 0; i < EEPROM_DATA_ADDR_BYTES; i++)
 		{

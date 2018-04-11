@@ -5,7 +5,6 @@
 SPI_HandleTypeDef hspi1;
 
 
-
 void  BSP_SPI_Init  (void)
 {
 	__HAL_RCC_GPIOA_CLK_ENABLE();

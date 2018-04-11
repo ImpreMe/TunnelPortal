@@ -1939,6 +1939,9 @@
         <name>$PROJ_DIR$\..\App\BSP\Include\bsp.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\App\BSP\Include\bsp_can.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\App\BSP\Include\bsp_clock.h</name>
       </file>
       <file>
@@ -1961,6 +1964,9 @@
       <name>Source</name>
       <file>
         <name>$PROJ_DIR$\..\App\BSP\Source\bsp.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\App\BSP\Source\bsp_can.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\App\BSP\Source\bsp_clock.c</name>

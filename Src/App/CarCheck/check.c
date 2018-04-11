@@ -122,27 +122,26 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)//捕获中断发生时�
 {
     if(htim->Instance == TIM5)
     {
-        if((Capture_Status & 0x80) != 0)//已经成功获取，还没处理
+        if((Capture_Status & 0x80) != 0)//已经成功获取，还没处理，直接返回
             return;
         if(Capture_Status & 0x40) //捕获到一个下降沿
         {
-            Capture_Status |= 0x80; //标记成功捕获到一次高电平脉宽
-            Capture_Value = HAL_TIM_ReadCapturedValue(&htim5,TIM_CHANNEL_2);//获取当前的捕获值.
-            TIM_RESET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2); //清除设置
-            TIM_SET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2,TIM_ICPOLARITY_FALLING);//下降沿捕获
+            Capture_Status |= 0x80; //标记成功捕获到一次低电平脉宽
+            Capture_Value = HAL_TIM_ReadCapturedValue(&htim5,TIM_CHANNEL_2);
+            TIM_RESET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2);
+            TIM_SET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2,TIM_ICPOLARITY_FALLING);
         }
         else //还未开始,第一次捕获下降沿
         {
-            Capture_Status = 0; //清空
+            Capture_Status = 0;
             Capture_Value  = 0;
             Capture_Status |= 0x40; //标记捕获到了下降沿
-            __HAL_TIM_DISABLE(&htim5); //关闭定时器5
+            __HAL_TIM_DISABLE(&htim5);
             __HAL_TIM_SET_COUNTER(&htim5,0);
-            TIM_RESET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2); //清除原来设置
-            TIM_SET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2,TIM_ICPOLARITY_RISING);//上升沿沿捕获
-            __HAL_TIM_ENABLE(&htim5);//使能定时器5
-        }       
+            TIM_RESET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2);
+            TIM_SET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2,TIM_ICPOLARITY_RISING);
+            __HAL_TIM_ENABLE(&htim5);
+        }
     }
-
 }
 

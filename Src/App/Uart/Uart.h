@@ -7,7 +7,7 @@
 
 extern UART_HandleTypeDef huart1;
 
-#define MAX_BUF_LEN   128
+#define MAX_BUF_LEN   256
 #define UART_TIME_OUT  200
 
 void USART1_UART_Init(void);

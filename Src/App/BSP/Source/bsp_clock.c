@@ -32,7 +32,8 @@ void  BSP_SystemClkCfg (void)
 {
     RCC_OscInitTypeDef RCC_OscInitStruct;
     RCC_ClkInitTypeDef RCC_ClkInitStruct;
-
+    RCC_PeriphCLKInitTypeDef PeriphClkInit;
+    
     /**Initializes the CPU, AHB and APB busses clocks 
     */
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
@@ -60,7 +61,13 @@ void  BSP_SystemClkCfg (void)
     {
         assert(0);
     }
-
+    
+    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+    PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
+    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+    {
+        assert(0);
+    }
     /**Configure the Systick interrupt time 
     */
     HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);

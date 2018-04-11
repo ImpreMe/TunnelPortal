@@ -4,7 +4,7 @@ UART_HandleTypeDef huart1;
 TIM_HandleTypeDef htim2;
 
 uint8_t rx_buf[MAX_BUF_LEN] = {0};
-static uint32_t rx_index = 0;
+static uint16_t rx_index = 0;
 
 static uint32_t light;
 	
@@ -66,7 +66,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 		
 		HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
 		HAL_NVIC_EnableIRQ(TIM2_IRQn);
-		HAL_TIM_Base_Start_IT(&htim2);
+		
 	}
 }
 
@@ -76,11 +76,17 @@ void USART1_IRQHandler(void)
 	tmp_flag = __HAL_UART_GET_FLAG(&huart1, UART_FLAG_RXNE);
 	tmp_it_source = __HAL_UART_GET_IT_SOURCE(&huart1, UART_IT_RXNE);
     if((tmp_flag != RESET) && (tmp_it_source != RESET))
-    {  
+    {
+        __HAL_TIM_SET_COUNTER(&htim2, 0);
+        if(rx_index == 0) //第一次接受数据，则打开定时器
+            HAL_TIM_Base_Start_IT(&htim2);
         rx_buf[rx_index++] = (uint8_t)(huart1.Instance->DR & (uint8_t)0x00FF);
-		if(rx_index >= MAX_BUF_LEN)
-			rx_index = 0;
-		__HAL_TIM_SET_COUNTER(&htim2, 0);
+		if(rx_index >= MAX_BUF_LEN) //缓冲区溢出,把之前收到的数据全部抛弃，重新获取
+        {
+            rx_index = 0;
+            HAL_TIM_Base_Stop_IT(&htim2);
+        }
+			
     }
 }
 
@@ -98,7 +104,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		{
 			light = rx_buf[5] << 8 | rx_buf[6];
 			rx_index = 0;
-			__HAL_TIM_SET_COUNTER(&htim2, 0);
+			HAL_TIM_Base_Stop_IT(&htim2);
 		}
 	}
 }
