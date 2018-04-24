@@ -2387,6 +2387,24 @@
     </file>
   </group>
   <group>
+    <name>COMM</name>
+    <file>
+      <name>$PROJ_DIR$\..\App\COMM\comm.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\COMM\comm.h</name>
+    </file>
+  </group>
+  <group>
+    <name>Debug</name>
+    <file>
+      <name>$PROJ_DIR$\..\App\Debug\debug.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\Debug\debug.h</name>
+    </file>
+  </group>
+  <group>
     <name>DIDO</name>
     <file>
       <name>$PROJ_DIR$\..\App\DIDO\dido.c</name>
@@ -2499,6 +2517,15 @@
         <name>$PROJ_DIR$\..\App\FreeRTOSV10.0.0\Source\timers.c</name>
       </file>
     </group>
+  </group>
+  <group>
+    <name>Light</name>
+    <file>
+      <name>$PROJ_DIR$\..\App\Light\Light.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\Light\Light.h</name>
+    </file>
   </group>
   <group>
     <name>SoftIIC</name>
@@ -2904,15 +2931,6 @@
         <name>$PROJ_DIR$\..\App\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_utils.c</name>
       </file>
     </group>
-  </group>
-  <group>
-    <name>UART</name>
-    <file>
-      <name>$PROJ_DIR$\..\App\Uart\Uart.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\App\Uart\Uart.h</name>
-    </file>
   </group>
   <group>
     <name>User</name>

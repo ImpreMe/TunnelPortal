@@ -5,15 +5,20 @@
 static ADC_HandleTypeDef hadc1;
 static DMA_HandleTypeDef hdma_adc1;
 
-static void MX_GPIO_Init(void);
+static void MX_PWM_Init(void);
 static void MX_ADC1_Init(void);
 
 uint16_t rx_adc[TOTAL_CHANNEL] = {0};
 
+
+static TIM_HandleTypeDef htim1;
+static TIM_HandleTypeDef htim5;
+static TIM_HandleTypeDef htim8;
+
 void DIDO_Init(void)
 {
-    MX_GPIO_Init();
-    MX_ADC1_Init();
+    MX_PWM_Init();
+    //MX_ADC1_Init();
 }
 
 /* ADC1 init function */
@@ -105,49 +110,157 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 
 }
 
-static void MX_GPIO_Init(void)
+/**
+    TIM1 : APB2总线，72MHz  >> CH1_CTR
+    TIM5 : APB1总线，72MHz  >> CH2_CTR
+    TIM8 : APB2总线，72MHz  >> CH3_CTR
+*/
+static void MX_PWM_Init(void)
 {
+    TIM_OC_InitTypeDef sConfigOC;  
+    htim1.Instance = TIM1;
+    htim1.Init.Prescaler = 72 - 1; //1M Hz 重装载值1000，所以PWM波周期为1KHz
+    htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim1.Init.Period = 1000 - 1;
+    htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htim1.Init.RepetitionCounter = 0;
+    htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+    if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
+    {
+        assert(0);
+    }
+    sConfigOC.OCMode = TIM_OCMODE_PWM1;
+    sConfigOC.Pulse = 0;
+    sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+    sConfigOC.OCNPolarity = TIM_OCNPOLARITY_LOW;
+    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+    sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+    sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+    if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+    {
+        assert(0);
+    }
 
-    GPIO_InitTypeDef GPIO_InitStruct;
-
-    /* GPIO Ports Clock Enable */
-    //__HAL_RCC_GPIOD_CLK_ENABLE();
-    __HAL_RCC_GPIOC_CLK_ENABLE();
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-
-    /*Configure GPIO pin Output Level */
-    HAL_GPIO_WritePin(CH1_CTR_PORT, CH1_CTR_PIN, GPIO_PIN_RESET);
-
-    /*Configure GPIO pin Output Level */
-    HAL_GPIO_WritePin(CH2_CTR_PORT, CH2_CTR_PIN, GPIO_PIN_RESET);
+    htim5.Instance = TIM5;
+    htim5.Init.Prescaler = 72 - 1; //1M Hz 重装载值1000，所以PWM波周期为1KHz
+    htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim5.Init.Period = 1000 - 1;
+    htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htim5.Init.RepetitionCounter = 0;
+    htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+    if (HAL_TIM_PWM_Init(&htim5) != HAL_OK)
+    {
+        assert(0);
+    }
+    sConfigOC.OCMode = TIM_OCMODE_PWM1;
+    sConfigOC.Pulse = 0;
+    sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+    sConfigOC.OCNPolarity = TIM_OCNPOLARITY_LOW;
+    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+    sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+    sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+    if (HAL_TIM_PWM_ConfigChannel(&htim5, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+    {
+        assert(0);
+    }
     
-    /*Configure GPIO pin Output Level */
-    HAL_GPIO_WritePin(CH3_CTR_PORT, CH3_CTR_PIN, GPIO_PIN_RESET);
-
-    /*Configure GPIO pins : PA8 */
-    GPIO_InitStruct.Pin = CH1_CTR_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(CH1_CTR_PORT, &GPIO_InitStruct);
-
-    /*Configure GPIO pins : PA0 */
-    GPIO_InitStruct.Pin = CH2_CTR_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(CH2_CTR_PORT, &GPIO_InitStruct);
+    htim8.Instance = TIM8;
+    htim8.Init.Prescaler = 72 - 1; //1M Hz 重装载值1000，所以PWM波周期为1KHz
+    htim8.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim8.Init.Period = 1000 - 1;
+    htim8.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htim8.Init.RepetitionCounter = 0;
+    htim8.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+    if (HAL_TIM_PWM_Init(&htim8) != HAL_OK)
+    {
+        assert(0);
+    }
+    sConfigOC.OCMode = TIM_OCMODE_PWM1;
+    sConfigOC.Pulse = 0;
+    sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+    sConfigOC.OCNPolarity = TIM_OCNPOLARITY_LOW;
+    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+    sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+    sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+    if (HAL_TIM_PWM_ConfigChannel(&htim8, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+    {
+        assert(0);
+    }
     
-    /*Configure GPIO pin : PC6 */
-    GPIO_InitStruct.Pin = CH3_CTR_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(CH3_CTR_PORT, &GPIO_InitStruct);
-
+    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);//开启PWM通道1
+    HAL_TIM_PWM_Start(&htim5,TIM_CHANNEL_1);//开启PWM通道1
+    HAL_TIM_PWM_Start(&htim8,TIM_CHANNEL_1);//开启PWM通道1
 }
 
-//void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
-//{
-//    if(hadc->Instance == ADC1)
-//    {
-//        
-//    }
-//}
+void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* htim_pwm)
+{
+    GPIO_InitTypeDef GPIO_InitStruct;
+    if(htim_pwm->Instance==TIM1)
+    {
+        /* Peripheral clock enable */
+        __HAL_RCC_TIM1_CLK_ENABLE();
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+        /**TIM1 GPIO Configuration    
+        PA8     ------> TIM1_CH1 
+        */
+        GPIO_InitStruct.Pin = GPIO_PIN_8;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    }
+    else if(htim_pwm->Instance==TIM5)
+    {
+        /* Peripheral clock enable */
+        __HAL_RCC_TIM5_CLK_ENABLE();
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+        /**TIM5 GPIO Configuration    
+        PA0-WKUP     ------> TIM5_CH1 
+        */
+        GPIO_InitStruct.Pin = GPIO_PIN_0;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    }
+    else if(htim_pwm->Instance==TIM8)
+    {
+
+        /* Peripheral clock enable */
+        __HAL_RCC_TIM8_CLK_ENABLE();
+        __HAL_RCC_GPIOC_CLK_ENABLE();
+        /**TIM8 GPIO Configuration    
+        PC6     ------> TIM8_CH1 
+        */
+        GPIO_InitStruct.Pin = GPIO_PIN_6;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    }
+}
+
+
+void Set_Lighteness(LightType_t lighttype , uint16_t lighteness)
+{
+    if(lighttype == WHITE)
+        TIM1->CCR1 = lighteness;
+
+    if(lighttype == YELLOW)
+        TIM5->CCR1 = lighteness;
+    
+    if(lighttype == RED)
+        TIM8->CCR1 = lighteness;
+}
+
+uint16_t Get_Lighteness(LightType_t lighttype)
+{
+    uint16_t lighteness = 0;
+    if(lighttype == WHITE)
+        lighteness = TIM1->CCR1;
+
+    if(lighttype == YELLOW)
+        lighteness = TIM5->CCR1;
+    
+    if(lighttype == RED)
+        lighteness = TIM8->CCR1;
+    
+    return lighteness;
+}

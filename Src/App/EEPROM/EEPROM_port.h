@@ -19,10 +19,10 @@ extern "C" {
 */
 
 #define EEPROM_I2C_INDEX        (0)
-#define EEPROM_SIZE             (64 * 1024 / 8)      // 24C064 (8192 * 8)
-#define EEPROM_PAGE_SIZE        (32)   //
+#define EEPROM_SIZE             (16 * 1024 / 8)      // 24C16 (2048 * 8)
+#define EEPROM_PAGE_SIZE        (16)                 // 16-byte Page
 #define EEPROM_SLAVE_ADDR       (0xA0)
-#define EEPROM_DATA_ADDR_BYTES  (2)
+#define EEPROM_DATA_ADDR_BYTES  (1)
 //#define EEPROM_BAUD_RATE        (I2C_BAUD_RATE_400K)
 
 

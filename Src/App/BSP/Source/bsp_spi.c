@@ -1,9 +1,7 @@
 #include  "bsp_spi.h"
 #include  "assert.h"
 
-
 SPI_HandleTypeDef hspi1;
-
 
 void  BSP_SPI_Init  (void)
 {
@@ -79,7 +77,6 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    
   }  
 }
 

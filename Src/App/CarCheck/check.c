@@ -1,147 +1,118 @@
-#include "stm32f1xx_hal.h"
-#include "check.h"
-#include "assert.h"
+#include "includes.h"
 
-TIM_HandleTypeDef htim5;
 
-static void MX_TIM5_Init(void);
+static TIM_HandleTypeDef htim6;
+
+static void MX_TIM6_Init(void);
 
 void check_init(void)
 {
-    MX_TIM5_Init();
+    MX_TIM6_Init();
 }
 
-static void MX_TIM5_Init(void)
+static void MX_TIM6_Init(void)
 {
+    GPIO_InitTypeDef GPIO_InitStruct;
 
-    TIM_MasterConfigTypeDef sMasterConfig;
-    TIM_IC_InitTypeDef sConfigIC;
-
-    htim5.Instance = TIM5;
-    htim5.Init.Prescaler = 72000 - 1;  //时钟为72Mhz，分频72，计数器时钟为1ms
-    htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim5.Init.Period = 0xffff;
-    htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-    htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-    if (HAL_TIM_IC_Init(&htim5) != HAL_OK)
-    {
-        assert(0);
-    }
-
-    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-    if (HAL_TIMEx_MasterConfigSynchronization(&htim5, &sMasterConfig) != HAL_OK)
-    {
-        assert(0);
-    }
-
-    sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;
-    sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
-    sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
-    sConfigIC.ICFilter = 0;
-    if (HAL_TIM_IC_ConfigChannel(&htim5, &sConfigIC, TIM_CHANNEL_2) != HAL_OK)
-    {
-        assert(0);
-    }
-    HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_2);
-    __HAL_TIM_ENABLE_IT(&htim5,TIM_IT_UPDATE); //使能更新中断
-    
-    HAL_NVIC_SetPriority(TIM5_IRQn,2,0); //设置中断优先级，抢占2，子优先级0
-    HAL_NVIC_EnableIRQ(TIM5_IRQn); //开启ITM5中断通道
-}
-
-void HAL_TIM_IC_MspInit(TIM_HandleTypeDef* htim_ic)
-{
-
-  GPIO_InitTypeDef GPIO_InitStruct;
-  if(htim_ic->Instance==TIM5)
-  {
-
-    /* Peripheral clock enable */
-    __HAL_RCC_TIM5_CLK_ENABLE();
+    /* GPIO Ports Clock Enable */
     __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**TIM5 GPIO Configuration    
-    PA1     ------> TIM5_CH2 
-    */
+
+
+    /*Configure GPIO pin : PA1 */
     GPIO_InitStruct.Pin = GPIO_PIN_1;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-  }
 
+    HAL_NVIC_SetPriority(EXTI1_IRQn, 2, 0);
+    HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+  
+    
+    __HAL_RCC_TIM6_CLK_ENABLE();
+    htim6.Instance = TIM6;
+    htim6.Init.Prescaler = 72 - 1;
+    htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim6.Init.Period = 1000 - 1;
+    htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+    if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
+    {
+        assert(0);
+    }
+    HAL_NVIC_SetPriority(TIM6_IRQn, 2, 0);
+    HAL_NVIC_EnableIRQ(TIM6_IRQn);    
 }
-
 
 //捕获状态
 //[7]:0,没有成功的捕获;1,成功捕获到一次.
 //[6]:0,还没捕获到上升沿;1,已经捕获到下降沿了.
 //[5:0]:捕获上升沿后溢出的次数(对于16位定时器来说,1ms计数器加1,溢出时间:65秒)
-uint8_t  Capture_Status=0; //输入捕获状态
-uint16_t Capture_Value;//输入捕获值(TIM2/TIM5是16位)
-
+volatile uint32_t  Capture_Status=0; //输入捕获状态
+static uint16_t Car_num = 0;
 
 //定时器5中断服务函数
-void TIM5_IRQHandler(void)
+void TIM6_IRQHandler(void)
 {
-    HAL_TIM_IRQHandler(&htim5);//定时器共用处理函数
+    HAL_TIM_IRQHandler(&htim6);//定时器共用处理函数
 }
 
-/*
-//定时器更新中断（溢出）中断处理回调函数， 在HAL_TIM_IRQHandler中会被调用
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)//更新中断发生时执行
+
+void EXTI1_IRQHandler(void)
 {
-    if(htim->Instance == TIM5)
-    {
-        if((Capture_Status & 0x80) ==0 )//还未成功捕获
-        {
-            if(Capture_Status & 0x40 )//已经捕获到高电平了
-            {
-                if((Capture_Status & 0x3F) == 0x3F)//高电平太长了
-                {
-                    Capture_Status |= 0x80; //标记成功捕获了一次
-                    Capture_Value = 0xffff;
-                }
-                else 
-                    Capture_Status++;
-            }
-        }        
-    }
-    else if(htim->Instance == TIM2)  //串口在使用定时器2
-    {
-        
-    }
-
-}*/
-
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
+}
 
 //车检器脉冲为一低电平脉冲，采集脉冲宽度来计算车流量
 //-----------|    |-----------
 //           |    |
 //           |____|
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)//捕获中断发生时执行
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if(htim->Instance == TIM5)
+    if(GPIO_Pin == GPIO_PIN_1)
     {
-        if((Capture_Status & 0x80) != 0)//已经成功获取，还没处理，直接返回
+        if((Capture_Status & 0x80000000) != 0)//已经成功获取，还没处理，直接返回
             return;
-        if(Capture_Status & 0x40) //捕获到一个下降沿
-        {
-            Capture_Status |= 0x80; //标记成功捕获到一次低电平脉宽
-            Capture_Value = HAL_TIM_ReadCapturedValue(&htim5,TIM_CHANNEL_2);
-            TIM_RESET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2);
-            TIM_SET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2,TIM_ICPOLARITY_FALLING);
-        }
-        else //还未开始,第一次捕获下降沿
+        
+        GPIO_PinState status = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1);
+        if(status == GPIO_PIN_RESET) //下降沿
         {
             Capture_Status = 0;
-            Capture_Value  = 0;
-            Capture_Status |= 0x40; //标记捕获到了下降沿
-            __HAL_TIM_DISABLE(&htim5);
-            __HAL_TIM_SET_COUNTER(&htim5,0);
-            TIM_RESET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2);
-            TIM_SET_CAPTUREPOLARITY(&htim5,TIM_CHANNEL_2,TIM_ICPOLARITY_RISING);
-            __HAL_TIM_ENABLE(&htim5);
+            Capture_Status |= 0x40000000; //标记捕获到了下降沿
+            __HAL_TIM_DISABLE(&htim6);
+            __HAL_TIM_SET_COUNTER(&htim6,0);     
+            HAL_TIM_Base_Start_IT(&htim6);
+        }
+        else if((Capture_Status & 0x40000000) && (status == GPIO_PIN_SET)) //捕获到一个上升沿
+        {
+            Capture_Status |= 0x80000000; //标记成功捕获到一次低电平脉宽
         }
     }
 }
 
+
+uint32_t temp = 0;
+void check_poll(void)
+{
+
+    static uint16_t temp_car_num = 0;
+    static uint32_t last_get = 0;
+    if(Capture_Status & 0x80000000) //成功捕获到了一次低电平
+    {
+        
+        temp = Capture_Status & 0x3fffffff;
+        Capture_Status=0; //开启下一次捕获
+        temp_car_num += temp / 600;
+    }
+    if((xTaskGetTickCount() - last_get) > CONTROL_INTERVAL * 60 * 1000)
+    {
+        last_get = xTaskGetTickCount();    
+        //计算车流量
+        Car_num = temp_car_num;
+        //Debug_Msg_Module_Printf(TEMP,"car is %d \n",Car_num);
+        temp_car_num = 0;
+    }
+}
+
+uint16_t get_car_num(void)
+{
+    return Car_num;
+}

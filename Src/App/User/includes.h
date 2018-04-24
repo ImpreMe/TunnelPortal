@@ -9,6 +9,13 @@
 #include "task.h"
 #include "semphr.h"
 
+#include "Light.h"
+#include "comm.h"
+#include "EEPROM.h"
+#include "check.h"
+#include "dido.h"
+#include "debug.h"
+
 //#include  "usbd_hid_core.h"
 //#include  "usbd_customhid_core.h"
 //#include  "usbd_usr.h"

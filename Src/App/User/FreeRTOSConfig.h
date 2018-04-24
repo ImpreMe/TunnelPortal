@@ -70,7 +70,7 @@
 #define configGENERATE_RUN_TIME_STATS	0
 
 /* Co-routine definitions. */
-#define configUSE_CO_ROUTINES 		0
+#define configUSE_CO_ROUTINES 	    	0
 #define configMAX_CO_ROUTINE_PRIORITIES ( 2 )
 
 /* Software timer definitions. */
@@ -120,9 +120,9 @@ header file. */
 	
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
 standard names. */
-#define vPortSVCHandler SVC_Handler
-#define xPortPendSVHandler PendSV_Handler
-#define xPortSysTickHandler SysTick_Handler
+#define vPortSVCHandler                 SVC_Handler
+#define xPortPendSVHandler              PendSV_Handler
+#define xPortSysTickHandler             SysTick_Handler
 
 #endif /* FREERTOS_CONFIG_H */
 
