@@ -18,7 +18,7 @@ static TIM_HandleTypeDef htim8;
 void DIDO_Init(void)
 {
     MX_PWM_Init();
-    //MX_ADC1_Init();
+    MX_ADC1_Init();
 }
 
 /* ADC1 init function */
@@ -68,7 +68,7 @@ static void MX_ADC1_Init(void)
     {
         assert(0);
     }
-    HAL_ADC_Start_DMA(&hadc1,(uint32_t*)rx_adc,TOTAL_CHANNEL);
+    HAL_ADC_Start_DMA(&hadc1,(uint32_t*)rx_adc,TOTAL_CHANNEL); 
 }
 
 
@@ -81,7 +81,8 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
   if(hadc->Instance==ADC1)
   {
     __HAL_RCC_ADC1_CLK_ENABLE();
-  
+    __HAL_RCC_GPIOC_CLK_ENABLE();
+    __HAL_RCC_DMA1_CLK_ENABLE();
     /**ADC1 GPIO Configuration    
     PC0     ------> ADC1_IN10
     PC1     ------> ADC1_IN11

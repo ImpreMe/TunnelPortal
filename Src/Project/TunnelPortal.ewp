@@ -2153,6 +2153,42 @@
     </file>
   </group>
   <group>
+    <name>LoRa</name>
+    <excluded>
+      <configuration>Debug</configuration>
+    </excluded>
+    <file>
+      <name>$PROJ_DIR$\..\App\LoRa\platform.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\LoRa\radio.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\LoRa\radio.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\LoRa\sx1276-Hal.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\LoRa\sx1276-LoRa.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\LoRa\sx1276-LoRa.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\LoRa\sx1276-LoRaMisc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\LoRa\sx1276-LoRaMisc.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\LoRa\sx1276.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\LoRa\sx1276.h</name>
+    </file>
+  </group>
+  <group>
     <name>SoftIIC</name>
     <file>
       <name>$PROJ_DIR$\..\App\SoftI2C\SoftI2C.c</name>

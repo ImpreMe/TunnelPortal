@@ -24,4 +24,6 @@ typedef enum
 void DIDO_Init(void);
 void Set_Lighteness(LightType_t lighttype , uint16_t lighteness);
 uint16_t Get_Lighteness(LightType_t lighttype);
+
+
 #endif
