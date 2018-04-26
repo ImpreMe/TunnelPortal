@@ -96,7 +96,13 @@ static void Comm_Poll(void)
     static uint32_t send_time_tick = 0;
     switch(Comm_Status)
     {
-        case STATUS_IDLE :
+        case STATUS_IDLE :  /*串口空闲此时应该一直监听串口数据(被动数据)*/
+            if(rx_comm_index != 0)
+            {
+                vTaskDelay(pdMS_TO_TICKS(100));
+                /* 开始处理接收的数据 增加协议处理*/
+                End_Comm();
+            }
             break;
         case STATUS_TX :
             /* 发送数据 */
@@ -104,7 +110,7 @@ static void Comm_Poll(void)
             send_time_tick = xTaskGetTickCount();
             Comm_Status = STATUS_RX;
             break;
-        case STATUS_RX :
+        case STATUS_RX : /*接受数据（主动数据）*/
             if(rx_comm_index != 0)
             {
                 vTaskDelay(pdMS_TO_TICKS(100));
