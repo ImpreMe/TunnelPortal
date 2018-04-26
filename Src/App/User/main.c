@@ -74,10 +74,13 @@ void vTaskLightCode( void * pvParameters )
         {
             Set_Lighteness(YELLOW , 0);
             Set_Lighteness(WHITE , 0);
-            if(light < 200)
-                Set_Lighteness(RED , 200);
-            else
+            if(light < 100)
+                Set_Lighteness(RED , 100);
+            else if(light < 300)
+                Set_Lighteness(RED , 300);
+            else if(light < 800)
                 Set_Lighteness(RED , 600);
+            
             vTaskDelay(pdMS_TO_TICKS(100));
         }
         else if(interval == 500) //车流量小,白灯1Hz
@@ -88,8 +91,10 @@ void vTaskLightCode( void * pvParameters )
                 Set_Lighteness(WHITE , 0);
             else
             {
-                if(light < 200)
-                    Set_Lighteness(WHITE , 200);
+                if(light < 100)
+                    Set_Lighteness(WHITE , 100);
+                else if(light < 300)
+                    Set_Lighteness(WHITE , 300);
                 else
                     Set_Lighteness(WHITE , 600);
             }
@@ -103,8 +108,10 @@ void vTaskLightCode( void * pvParameters )
                 Set_Lighteness(YELLOW , 0);
             else
             {
-                if(light < 200)
-                    Set_Lighteness(YELLOW , 200);
+                if(light < 100)
+                    Set_Lighteness(YELLOW , 100);
+                else if(light < 300)
+                    Set_Lighteness(YELLOW , 300);
                 else
                     Set_Lighteness(YELLOW , 600);
             }
@@ -118,8 +125,10 @@ void vTaskLightCode( void * pvParameters )
                 Set_Lighteness(YELLOW , 0);
             else
             {
-                if(light < 200)
-                    Set_Lighteness(YELLOW , 200);
+                if(light < 100)
+                    Set_Lighteness(YELLOW , 100);
+                else if(light < 300)
+                    Set_Lighteness(YELLOW , 300);
                 else
                     Set_Lighteness(YELLOW , 600);
             }
