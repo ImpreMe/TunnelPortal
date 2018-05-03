@@ -8,8 +8,64 @@ static uint8_t rx_comm_buf[MAX_LEN] = {0};
 static uint16_t tx_comm_index = 0;
 static uint8_t tx_comm_buf[MAX_LEN] = {0};
 
-CommStatus_t Comm_Status = STATUS_IDLE;
-uint8_t try_times = 0;
+static CommStatus_t Comm_Status = STATUS_IDLE;
+static uint8_t try_times = 0;
+
+
+extern SemaphoreHandle_t xConfig_mutex;
+
+
+static Config_t g_tConfig = {0};
+
+
+void Config_Init(void)
+{
+    EEPROM_Read(CONFIG_ADDR, &g_tConfig, sizeof(Config_t));
+    uint16_t crc = CRC16_IBM_Calc(&g_tConfig , sizeof(Config_t) - 2);
+    if(crc != g_tConfig.crc16)
+    {
+        EEPROM_Read(BACK_CONFIG_ADDR, &g_tConfig, sizeof(Config_t));
+        uint16_t crc_back = CRC16_IBM_Calc(&g_tConfig , sizeof(Config_t) - 2);  
+        if(crc_back != g_tConfig.crc16)
+        {
+            g_tConfig.control_mode = 0;
+            g_tConfig.control_period = 1;
+            g_tConfig.lamp_mode[0] = 0;  //白灯的模式
+            g_tConfig.lamp_mode[1] = 0;  //黄灯的模式
+            g_tConfig.lamp_mode[2] = 0;  //红灯的模式
+            g_tConfig.manual_time = 0;
+        }
+        else
+            EEPROM_Write(CONFIG_ADDR, &g_tConfig, sizeof(Config_t));
+    }
+}
+
+uint8_t Get_Config(Config_t *config)
+{
+    if( xSemaphoreTake( xConfig_mutex, 10 ) == pdPASS )
+    {
+        memcpy(config,&g_tConfig,sizeof(Config_t));
+        xSemaphoreGive( xConfig_mutex );
+        return 0;
+    }
+    return 1;
+}
+
+uint8_t Set_Config(Config_t config)
+{
+    if( xSemaphoreTake( xConfig_mutex, 100 ) == pdPASS )
+    {
+        memcpy(&g_tConfig,&config,sizeof(Config_t));
+        xSemaphoreGive( xConfig_mutex );
+        g_tConfig.crc16 = CRC16_IBM_Calc(&g_tConfig , sizeof(Config_t) - 2);  
+        if(EEPROM_Write(CONFIG_ADDR, &g_tConfig, sizeof(Config_t)))
+            return 1;
+        if(EEPROM_Write(BACK_CONFIG_ADDR, &g_tConfig, sizeof(Config_t)))
+            return 1;
+        return 0;
+    }
+    return 1;
+}
 
 /* UART4 init function */
 void Comm_Init(void)
@@ -127,10 +183,10 @@ static void Comm_Poll(void)
             if(rx_comm_index != 0)
             {
                 vTaskDelay(pdMS_TO_TICKS(100));
-                /* 开始处理接收的数据 增加协议处理*/
+                /*开始处理接收的数据 增加协议处理*/
                 End_Comm();
             }
-            else if((xTaskGetTickCount() - send_time_tick) > Comm_TIME_OUT)
+            else if((xTaskGetTickCount() - send_time_tick) > COMM_TIME_OUT)
             {
                 Comm_Status = STATUS_TIMEOUT;
             }
@@ -157,11 +213,14 @@ void vTaskCommCode( void * pvParameters )
 {
     (void)pvParameters;
     static uint32_t last_report = 0;
+
+        
     while(1)
     {
         if((xTaskGetTickCount() - last_report) > 1 * 60 * 1000)
         {
-            //上报一次当前数据
+            /*上报一次当前数据*/
+            //Comm_Send(const void * buf , uint16_t len , STATUS_TX_NOREPLY);
         }
         Comm_Poll();
         Light_Poll();

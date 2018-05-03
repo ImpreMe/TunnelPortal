@@ -9,6 +9,7 @@
 #include "task.h"
 #include "semphr.h"
 
+#include "CRC.h"
 #include "Light.h"
 #include "comm.h"
 #include "EEPROM.h"

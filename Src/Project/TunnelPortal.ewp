@@ -324,6 +324,7 @@
           <state>$PROJ_DIR$\..\App\Light</state>
           <state>$PROJ_DIR$\..\App\COMM</state>
           <state>$PROJ_DIR$\..\App\Debug</state>
+          <state>$PROJ_DIR$\..\App\CRC</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -2018,6 +2019,24 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\App\COMM\comm.h</name>
+    </file>
+  </group>
+  <group>
+    <name>CRC</name>
+    <file>
+      <name>$PROJ_DIR$\..\App\CRC\CRC.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\CRC\CRC16_IBM.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\CRC\CRC32_IEEE.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\CRC\CRC8_CCITT.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\CRC\CRC8_PLC.c</name>
     </file>
   </group>
   <group>

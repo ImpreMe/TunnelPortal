@@ -2396,6 +2396,24 @@
     </file>
   </group>
   <group>
+    <name>CRC</name>
+    <file>
+      <name>$PROJ_DIR$\..\App\CRC\CRC.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\CRC\CRC16_IBM.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\CRC\CRC32_IEEE.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\CRC\CRC8_CCITT.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\CRC\CRC8_PLC.c</name>
+    </file>
+  </group>
+  <group>
     <name>Debug</name>
     <file>
       <name>$PROJ_DIR$\..\App\Debug\debug.c</name>
