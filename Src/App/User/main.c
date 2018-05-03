@@ -36,11 +36,18 @@ int main (void)
 void vTaskDemoCode( void * pvParameters )
 {
     (void)pvParameters;
-    //uint8_t buf[10] = {0x01,0x12,0x23,0x34,0x45,0x56,0x67,0x78,0x89,0x90};
+    
+//    uint8_t ttt[20] = {0};
+//    for(int i = 0 ; i < sizeof(ttt) ; i++)
+//        ttt[i] = i + 0x90;
+//    
+//    uint8_t rrr[20] = {0};
+//    
+//    EEPROM_Write(500,ttt,sizeof(ttt));
+//    EEPROM_Read(500,rrr,sizeof(rrr));
     
     while(1)
     {
-        //Comm_Send(buf , sizeof(buf));
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 }

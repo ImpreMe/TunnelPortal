@@ -13,6 +13,7 @@ typedef enum
 {
     STATUS_IDLE,
     STATUS_TX,
+    STATUS_TX_NOREPLY,
     STATUS_RX,
     STATUS_TIMEOUT
 }CommStatus_t;
@@ -21,6 +22,6 @@ void Comm_Init(void);
 
 void vTaskCommCode( void * pvParameters );
 
-void Comm_Send(const void * buf , uint16_t len);
+void Comm_Send(const void * buf , uint16_t len , CommStatus_t mod);
 
 #endif

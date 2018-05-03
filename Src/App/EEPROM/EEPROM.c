@@ -35,11 +35,18 @@ uint8_t EEPROM_Write(uint32_t addr, const void* buf, uint16_t len)
 	
 	while (need_len > 0)
 	{
-		// fill addr
-		for (uint8_t i = 0; i < EEPROM_DATA_ADDR_BYTES; i++)
-		{
-			tx_buf[EEPROM_DATA_ADDR_BYTES - i - 1] = (uint8_t)(w_addr >> (8 * i));
-		}
+        if(EEPROM_TYPE > AT24C16) //采用2个字节寻址，没有页地址，只有器件地址
+        {
+            // fill addr
+            for (uint8_t i = 0; i < EEPROM_DATA_ADDR_BYTES; i++)
+            {
+                tx_buf[EEPROM_DATA_ADDR_BYTES - i - 1] = (uint8_t)(w_addr >> (8 * i));
+            }
+        }
+        else //采用一个字节寻址，器件地址带有页地址
+            tx_buf[EEPROM_DATA_ADDR_BYTES - 1] = (uint8_t)(w_addr % 256);
+    
+
 		// fill data
 		uint16_t tx_data_len;
 		if (w_addr % EEPROM_PAGE_SIZE) // not page aligned
@@ -52,7 +59,11 @@ uint8_t EEPROM_Write(uint32_t addr, const void* buf, uint16_t len)
 		}
 		memcpy(tx_buf + EEPROM_DATA_ADDR_BYTES, p_data_buf, tx_data_len);
 
-        uint8_t err = I2C_Trans(EEPROM_I2C_INDEX, EEPROM_SLAVE_ADDR, tx_buf, EEPROM_DATA_ADDR_BYTES + tx_data_len , NULL, 0, 3);
+        uint8_t err ;
+        if(EEPROM_TYPE > AT24C16)
+            err = I2C_Trans(EEPROM_I2C_INDEX, EEPROM_SLAVE_ADDR, tx_buf, EEPROM_DATA_ADDR_BYTES + tx_data_len , NULL, 0, 3);
+        else
+            err = I2C_Trans(EEPROM_I2C_INDEX, EEPROM_SLAVE_ADDR + ((w_addr/256)<<1), tx_buf, EEPROM_DATA_ADDR_BYTES + tx_data_len , NULL, 0, 3);
 		status = err;
         if (err != I2C_ERR_NONE)
 		{
@@ -74,13 +85,23 @@ uint8_t EEPROM_Read(uint32_t addr, void* buf, uint16_t len)
 		return EEPROM_ERR_ARGS;
 	}
     uint8_t  tx_buf[EEPROM_DATA_ADDR_BYTES];
-	// fill addr
-	for (uint8_t i = 0; i < EEPROM_DATA_ADDR_BYTES; i++)
-	{
-		tx_buf[EEPROM_DATA_ADDR_BYTES - i - 1] = (uint8_t)(addr >> (8 * i));
-	}
+    if(EEPROM_TYPE > AT24C16) //采用2个字节寻址，没有页地址，只有器件地址
+    {
+        // fill addr
+        for (uint8_t i = 0; i < EEPROM_DATA_ADDR_BYTES; i++)
+        {
+            tx_buf[EEPROM_DATA_ADDR_BYTES - i - 1] = (uint8_t)(addr >> (8 * i));
+        }
+    }
+    else //采用一个字节寻址，器件地址带有页地址
+        tx_buf[EEPROM_DATA_ADDR_BYTES - 1] = (uint8_t)(addr % 256);
     
-	uint8_t err = I2C_Trans(EEPROM_I2C_INDEX, EEPROM_SLAVE_ADDR, tx_buf, EEPROM_DATA_ADDR_BYTES, (uint8_t*)buf, len, 3);
+	uint8_t err ;
+    if(EEPROM_TYPE > AT24C16)
+        err = I2C_Trans(EEPROM_I2C_INDEX, EEPROM_SLAVE_ADDR, tx_buf, EEPROM_DATA_ADDR_BYTES, (uint8_t*)buf, len, 3);
+    else
+        err = I2C_Trans(EEPROM_I2C_INDEX, EEPROM_SLAVE_ADDR + ((addr/256)<<1), tx_buf, EEPROM_DATA_ADDR_BYTES, (uint8_t*)buf, len, 3);
+        
 	status = err;
 	return (err == I2C_ERR_NONE) ? EEPROM_ERR_NONE : EEPROM_ERR_I2C;
 }

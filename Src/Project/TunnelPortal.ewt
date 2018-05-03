@@ -2530,38 +2530,38 @@
   <group>
     <name>LoRa</name>
     <file>
-      <name>$PROJ_DIR$\..\App\LoRa\platform.h</name>
+      <name>$PROJ_DIR$\..\App\Lora\platform.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\LoRa\radio.c</name>
+      <name>$PROJ_DIR$\..\App\Lora\radio.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\LoRa\radio.h</name>
+      <name>$PROJ_DIR$\..\App\Lora\radio.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\LoRa\sx1276-Hal.h</name>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276-Hal.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\LoRa\sx1276-LoRa.c</name>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276-LoRa.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\LoRa\sx1276-LoRa.h</name>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276-LoRa.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\LoRa\sx1276-LoRaMisc.c</name>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276-LoRaMisc.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\LoRa\sx1276-LoRaMisc.h</name>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276-LoRaMisc.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\LoRa\sx1276.c</name>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\App\LoRa\sx1276.h</name>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276.h</name>
     </file>
   </group>
   <group>
-    <name>SoftIIC</name>
+    <name>SoftI2C</name>
     <file>
       <name>$PROJ_DIR$\..\App\SoftI2C\SoftI2C.c</name>
     </file>

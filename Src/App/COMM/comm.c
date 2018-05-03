@@ -83,12 +83,20 @@ static void End_Comm(void)
     memset(tx_comm_buf , 0 , sizeof(tx_comm_buf));
 }
 
-void Comm_Send(const void * buf , uint16_t len)
+/**
+  * 发送数据
+  * buf 发送缓冲区
+  * len 发送数据长度
+  * mod 发送模式，只能取STATUS_TX,STATUS_TX_NOREPLY
+  */
+void Comm_Send(const void * buf , uint16_t len , CommStatus_t mod)
 {
+    if((mod != STATUS_TX) && (mod != STATUS_TX_NOREPLY))
+        return ;
     if(len > MAX_LEN) return ;
     memcpy(tx_comm_buf , buf , len);
     tx_comm_index = len;
-    Set_CommStatus(STATUS_TX);
+    Set_CommStatus(mod); 
 }
 
 static void Comm_Poll(void)
@@ -110,6 +118,11 @@ static void Comm_Poll(void)
             send_time_tick = xTaskGetTickCount();
             Comm_Status = STATUS_RX;
             break;
+        case STATUS_TX_NOREPLY :
+            /* 发送数据 */
+            HAL_UART_Transmit(&huart4, tx_comm_buf, tx_comm_index, 500);
+            Comm_Status = STATUS_IDLE;
+            break;            
         case STATUS_RX : /*接受数据（主动数据）*/
             if(rx_comm_index != 0)
             {
@@ -143,8 +156,13 @@ static void Comm_Poll(void)
 void vTaskCommCode( void * pvParameters )
 {
     (void)pvParameters;
+    static uint32_t last_report = 0;
     while(1)
     {
+        if((xTaskGetTickCount() - last_report) > 1 * 60 * 1000)
+        {
+            //上报一次当前数据
+        }
         Comm_Poll();
         Light_Poll();
         check_poll();
