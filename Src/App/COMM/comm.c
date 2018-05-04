@@ -30,10 +30,6 @@ void Config_Init(void)
         {
             g_tConfig.control_mode = 0;
             g_tConfig.control_period = 1;
-            g_tConfig.lamp_mode[0] = 0;  //白灯的模式
-            g_tConfig.lamp_mode[1] = 0;  //黄灯的模式
-            g_tConfig.lamp_mode[2] = 0;  //红灯的模式
-            g_tConfig.manual_time = 0;
         }
         else
             EEPROM_Write(CONFIG_ADDR, &g_tConfig, sizeof(Config_t));

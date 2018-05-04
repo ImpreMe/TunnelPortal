@@ -25,10 +25,11 @@ typedef enum
 __packed typedef struct
 {
     uint8_t  control_mode;      //自动控制还是手动控制 0:自动  1:手动
-    uint16_t manual_time;       //手动控制时的控制时间(以分钟为单位)
-    uint16_t control_period;    //自动控制的控制周期(以分钟为单位)
     uint8_t  lamp_mode[3];     //三种颜色灯的运行模式
     uint8_t  lamp_value[3];     //三种颜色灯的亮度
+    uint16_t control_period;    //自动控制的控制周期(以分钟为单位)
+    uint16_t manual_duration;   //手动控制时的控制时间(以分钟为单位)
+    uint32_t manual_tick;
     uint16_t crc16;
 }Config_t;
 

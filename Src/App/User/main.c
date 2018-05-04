@@ -60,16 +60,14 @@ void vTaskDemoCode( void * pvParameters )
 void vTaskLightCode( void * pvParameters )
 {
     (void)pvParameters;
-    Set_Lighteness(WHITE , 200);
+    //Set_Lighteness(WHITE , 200);
     
-    static uint32_t enter_manual_tick = 0;
     static uint32_t last_control = 0;
     uint32_t light ;    //当前环境光照强度
     uint16_t num ;      //当前环境车流量数据
     Config_t temp_config;
     
-    static uint8_t previous_mode = 0;
-    uint8_t interval[3] = {2,0,0};
+    uint8_t light_mode[3] = {2,0,0};
     
     uint8_t iCount[3] = {0};
     while(1)
@@ -87,33 +85,28 @@ void vTaskLightCode( void * pvParameters )
             last_control = xTaskGetTickCount();
             if(num < 5)
             {
-                interval[0] = 2;
-                interval[1] = 0;
-                interval[2] = 0;
+                light_mode[0] = 2;
+                light_mode[1] = 0;
+                light_mode[2] = 0;
             }
             else if(num < 15)
             {
-                interval[0] = 0;
-                interval[1] = 3;
-                interval[2] = 0;             
+                light_mode[0] = 0;
+                light_mode[1] = 3;
+                light_mode[2] = 0;             
             }
      
             else 
             {
-                interval[0] = 0;
-                interval[1] = 4;
-                interval[2] = 0;            
+                light_mode[0] = 0;
+                light_mode[1] = 4;
+                light_mode[2] = 0;            
             }            
         }              
-        if((temp_config.control_mode == 1) && (previous_mode == 0)) //切换为手动状态,记录切换的时间
-        {
-            enter_manual_tick = xTaskGetTickCount();
-            previous_mode = 1;
-        }
-        if(((xTaskGetTickCount() - enter_manual_tick) > temp_config.manual_time * 60 * 1000 ) && (previous_mode == 1))
+
+        if(((xTaskGetTickCount() - temp_config.manual_tick) > temp_config.manual_duration * 60 * 1000 ) && (temp_config.control_mode == 1))
         {
             temp_config.control_mode = 0;
-            previous_mode = 0;
             Set_Config(temp_config);
         }
         uint8_t mode[3] = {0xFF , 0xFF , 0xFF};
@@ -123,7 +116,7 @@ void vTaskLightCode( void * pvParameters )
             if(temp_config.control_mode == 1) //手动模式
                 mode[i] = temp_config.lamp_mode[i];
             else
-                mode[i] = interval[i];
+                mode[i] = light_mode[i];
         }            
 
         for(int i = 0 ; i < 3 ; i++)
