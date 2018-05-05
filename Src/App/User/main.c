@@ -5,7 +5,7 @@ void vTaskDemoCode( void * pvParameters );
 void vTaskLightCode( void * pvParameters );
 
 SemaphoreHandle_t xConfig_mutex;
-
+SemaphoreHandle_t xReset_seam;
 int main (void)
 {
     HAL_Init();
@@ -16,6 +16,8 @@ int main (void)
     Light_Init();
     check_init();
     DIDO_Init();
+    
+    
     
     BaseType_t err;
     TaskHandle_t xHandleDemo;
@@ -32,6 +34,9 @@ int main (void)
     
     xConfig_mutex = xSemaphoreCreateMutex();
     assert(xConfig_mutex != NULL);
+    
+    xReset_seam = xSemaphoreCreateBinary();
+    assert(xReset_seam != NULL);
     
     vTaskStartScheduler();
     return 0;
@@ -57,17 +62,45 @@ void vTaskDemoCode( void * pvParameters )
     }
 }
 
+void Get_mode_from_num(uint16_t num , uint8_t array[])
+{
+    if(num < 5)
+    {
+        array[0] = 2;
+        array[1] = 0;
+        array[2] = 0;
+    }
+    else if(num < 15)
+    {
+        array[0] = 0;
+        array[1] = 3;
+        array[2] = 0;             
+    }
+    else 
+    {
+        array[0] = 0;
+        array[1] = 4;
+        array[2] = 0;
+    }  
+}
+
+uint16_t Get_value_from_light(uint32_t light_value)
+{
+    return 500;
+}
+
 void vTaskLightCode( void * pvParameters )
 {
     (void)pvParameters;
     //Set_Lighteness(WHITE , 200);
+    Config_Init();
     
     static uint32_t last_control = 0;
     uint32_t light ;    //当前环境光照强度
     uint16_t num ;      //当前环境车流量数据
     Config_t temp_config;
     
-    uint8_t light_mode[3] = {2,0,0};
+    uint8_t light_mode[3] = {2,1,1};
     
     uint8_t iCount[3] = {0};
     while(1)
@@ -83,25 +116,7 @@ void vTaskLightCode( void * pvParameters )
         if((xTaskGetTickCount() - last_control) > temp_config.control_period * 60 * 1000)
         {
             last_control = xTaskGetTickCount();
-            if(num < 5)
-            {
-                light_mode[0] = 2;
-                light_mode[1] = 0;
-                light_mode[2] = 0;
-            }
-            else if(num < 15)
-            {
-                light_mode[0] = 0;
-                light_mode[1] = 3;
-                light_mode[2] = 0;             
-            }
-     
-            else 
-            {
-                light_mode[0] = 0;
-                light_mode[1] = 4;
-                light_mode[2] = 0;            
-            }            
+            Get_mode_from_num(num,light_mode);
         }              
 
         if(((xTaskGetTickCount() - temp_config.manual_tick) > temp_config.manual_duration * 60 * 1000 ) && (temp_config.control_mode == 1))
@@ -130,7 +145,7 @@ void vTaskLightCode( void * pvParameters )
                 break;
                 case 1:
                 {
-                    Set_Lighteness((LightType_t)i , 600);
+                    Set_Lighteness((LightType_t)i , Get_value_from_light(light));
                 }
                 break;
                 case 2:
@@ -142,7 +157,7 @@ void vTaskLightCode( void * pvParameters )
                         if(Get_Lighteness((LightType_t)i))
                             Set_Lighteness((LightType_t)i , 0);
                         else
-                            Set_Lighteness((LightType_t)i , 600);
+                            Set_Lighteness((LightType_t)i , Get_value_from_light(light));
                     }
                 }
                 break;
@@ -155,7 +170,7 @@ void vTaskLightCode( void * pvParameters )
                         if(Get_Lighteness((LightType_t)i))
                             Set_Lighteness((LightType_t)i , 0);
                         else
-                            Set_Lighteness((LightType_t)i , 600);
+                            Set_Lighteness((LightType_t)i , Get_value_from_light(light));
                     }                        
                 }
                 break;
@@ -168,7 +183,7 @@ void vTaskLightCode( void * pvParameters )
                         if(Get_Lighteness((LightType_t)i))
                             Set_Lighteness((LightType_t)i , 0);
                         else
-                            Set_Lighteness((LightType_t)i , 600);
+                            Set_Lighteness((LightType_t)i , Get_value_from_light(light));
                     }                        
                 }
                 break;
