@@ -100,7 +100,7 @@ void vTaskLightCode( void * pvParameters )
     uint16_t num ;      //当前环境车流量数据
     Config_t temp_config;
     
-    uint8_t light_mode[3] = {2,1,1};
+    uint8_t light_mode[3] = {1,1,1};
     
     uint8_t iCount[3] = {0};
     while(1)

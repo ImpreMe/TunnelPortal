@@ -13,7 +13,7 @@
 #define CH3_CTR_PIN      GPIO_PIN_6
 
 #define TOTAL_CHANNEL    3
-
+#define AVERAGE_NUM      100
 typedef enum
 {
     WHITE,

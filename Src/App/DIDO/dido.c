@@ -105,10 +105,46 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     {
         assert(0);
     }
-
+    HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 3, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
     __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc1);
   }
 
+}
+
+void DMA1_Channel1_IRQHandler(void)
+{
+    HAL_DMA_IRQHandler(&hdma_adc1);
+}
+
+float adc[TOTAL_CHANNEL];
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+    static uint16_t Average_array[AVERAGE_NUM][TOTAL_CHANNEL] = {0};
+    static uint16_t average_time = 0;
+    if(hadc->Instance == ADC1)
+    {
+        Average_array[average_time][0] = rx_adc[0];
+        Average_array[average_time][1] = rx_adc[1];
+        Average_array[average_time][2] = rx_adc[2];
+        average_time++;
+        if(average_time >= AVERAGE_NUM)
+        {
+            float sum = 0;
+            for(int i = 0 ; i < TOTAL_CHANNEL ;i++)
+            {
+                for(int j = 0 ; j < AVERAGE_NUM ; j++)
+                {
+                    sum += Average_array[j][i];
+                }
+                adc[i] = sum / AVERAGE_NUM;
+                sum = 0;
+            }
+            average_time = 0;
+        }
+        
+    }
+    
 }
 
 /**
