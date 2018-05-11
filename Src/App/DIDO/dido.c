@@ -17,7 +17,7 @@ static TIM_HandleTypeDef htim8;
 
 void DIDO_Init(void)
 {
-    //MX_PWM_Init();
+    MX_PWM_Init();
     MX_ADC1_Init();
 }
 

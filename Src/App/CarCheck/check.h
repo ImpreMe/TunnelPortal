@@ -12,6 +12,6 @@
 extern volatile uint32_t  Capture_Status; //输入捕获状态
 
 void check_init(void);
-void check_poll(void);
+void check_poll(uint16_t interval);
 uint16_t get_car_num(void);
 #endif

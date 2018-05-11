@@ -369,10 +369,10 @@ static void get_status(pDataFrame_t ppkg)
         Get_current(current_value);
         for(int i = 0 ; i < sizeof(current_value) / sizeof(float) ; i++)
         {
-            data.data[17 + i*4]     = ((int)current_value[i]);
-            data.data[17 + i*4 + 1] = ((int)current_value[i] >> 8);
-            data.data[17 + i*4 + 2] = ((int)current_value[i] >> 16);
-            data.data[17 + i*4 + 3] = ((int)current_value[i] >> 24);
+            data.data[17 + i*4]     = ((int)(current_value[i] * 1000));
+            data.data[17 + i*4 + 1] = ((int)(current_value[i] * 1000) >> 8);
+            data.data[17 + i*4 + 2] = ((int)(current_value[i] * 1000) >> 16);
+            data.data[17 + i*4 + 3] = ((int)(current_value[i] * 1000) >> 24);
         }
     }
     Comm_Send(&data , data.length , STATUS_TX_NOREPLY);
@@ -440,10 +440,10 @@ static void Auto_report(void)
     Get_current(current_value);
     for(int i = 0 ; i < sizeof(current_value) / sizeof(float) ; i++)
     {
-        data.data[17 + i*4]     = ((int)current_value);
-        data.data[17 + i*4 + 1] = ((int)current_value >> 8);
-        data.data[17 + i*4 + 2] = ((int)current_value >> 16);
-        data.data[17 + i*4 + 3] = ((int)current_value >> 24);
+        data.data[17 + i*4]     = ((int)(current_value[i] * 1000));
+        data.data[17 + i*4 + 1] = ((int)(current_value[i] * 1000) >> 8);
+        data.data[17 + i*4 + 2] = ((int)(current_value[i] * 1000) >> 16);
+        data.data[17 + i*4 + 3] = ((int)(current_value[i] * 1000) >> 24);
     }
     Comm_Send(&data , data.length , STATUS_TX_NOREPLY);    
 }
@@ -586,7 +586,7 @@ void vTaskCommCode( void * pvParameters )
         }
         Comm_Poll();        
         Light_Poll();
-        check_poll();
+        check_poll(g_tConfig.control_period);
         ADC_Poll();
         vTaskDelay(pdMS_TO_TICKS(20));
     }

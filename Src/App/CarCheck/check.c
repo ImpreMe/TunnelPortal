@@ -90,9 +90,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 
 uint32_t temp = 0;
-void check_poll(void)
+void check_poll(uint16_t interval)
 {
-
+    uint32_t inter = interval > 0 ? interval * 60 * 1000 : 5 * 1000;
     static uint16_t temp_car_num = 0;
     static uint32_t last_get = 0;
     if(Capture_Status & 0x80000000) //成功捕获到了一次低电平
@@ -102,7 +102,7 @@ void check_poll(void)
         Capture_Status=0; //开启下一次捕获
         temp_car_num += temp / 600;
     }
-    if((xTaskGetTickCount() - last_get) > CONTROL_INTERVAL * 60 * 1000)
+    if((xTaskGetTickCount() - last_get) > inter)
     {
         last_get = xTaskGetTickCount();    
         //计算车流量
