@@ -16,8 +16,27 @@ int main (void)
     Light_Init();
     check_init();
     DIDO_Init();
-    
-    
+        GPIO_InitTypeDef GPIO_InitStruct;
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+        /**TIM1 GPIO Configuration    
+        PA8     ------> TIM1_CH1 
+        */
+        GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_8;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);  
+        
+        __HAL_RCC_GPIOC_CLK_ENABLE();
+        /**TIM1 GPIO Configuration    
+        PA8     ------> TIM1_CH1 
+        */
+        GPIO_InitStruct.Pin = GPIO_PIN_6;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+        
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_8, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
     
     BaseType_t err;
     TaskHandle_t xHandleDemo;
@@ -62,19 +81,19 @@ void vTaskDemoCode( void * pvParameters )
     }
 }
 
-void Get_mode_from_num(uint16_t num , uint8_t array[])
+void Get_mode_from_num(uint16_t num ,Config_t config, uint8_t array[])
 {
-    if(num < 5)
+    if(num < config.threshold1)
     {
         array[0] = 2;
         array[1] = 0;
         array[2] = 0;
     }
-    else if(num < 15)
+    else if(num < config.threshold2)
     {
         array[0] = 0;
         array[1] = 3;
-        array[2] = 0;             
+        array[2] = 0;
     }
     else 
     {
@@ -84,10 +103,14 @@ void Get_mode_from_num(uint16_t num , uint8_t array[])
     }  
 }
 
-uint16_t Get_value_from_light(uint32_t light_value)
+void Get_value_from_light(uint32_t light_value ,Config_t config,uint8_t lamp_value[])
 {
-    return 500;
+    (void)config;
+    lamp_value[0] = 100;
+    lamp_value[1] = 100;
+    lamp_value[2] = 100;
 }
+
 
 void vTaskLightCode( void * pvParameters )
 {
@@ -100,14 +123,18 @@ void vTaskLightCode( void * pvParameters )
     uint16_t num ;      //当前环境车流量数据
     Config_t temp_config;
     
-    uint8_t light_mode[3] = {1,1,1};
+    uint8_t light_mode_auto[3] = {2,0,0}; //自动条件下用来计算临时模式的数组
+    uint8_t light_value_auto[3] = {50,50,50}; //自动条件下用来计算临时模式的数组
     
     uint8_t iCount[3] = {0};
+    
+    uint8_t mode[3] = {0xFF , 0xFF , 0xFF}; //灯光工作模式（统一入口）
+    uint8_t value[3] = {50,50,50};          //灯光亮度（统一入口）
     while(1)
     {
         if(Get_Config(&temp_config))
         {
-            vTaskDelay(pdMS_TO_TICKS(10));
+            vTaskDelay(pdMS_TO_TICKS(50));
             continue;
         }
         light = Get_Light(); //获取当前环境亮度
@@ -116,22 +143,31 @@ void vTaskLightCode( void * pvParameters )
         if((xTaskGetTickCount() - last_control) > temp_config.control_period * 60 * 1000)
         {
             last_control = xTaskGetTickCount();
-            Get_mode_from_num(num,light_mode);
+            Get_mode_from_num(num,temp_config,light_mode_auto);
         }              
-
+        /* 根据光照计算亮度值*/
+        Get_value_from_light(light ,temp_config,light_value_auto);
+        
         if(((xTaskGetTickCount() - temp_config.manual_tick) > temp_config.manual_duration * 60 * 1000 ) && (temp_config.control_mode == 1))
         {
             temp_config.control_mode = 0;
             Set_Config(temp_config);
         }
-        uint8_t mode[3] = {0xFF , 0xFF , 0xFF};
 
         for(int i = 0 ; i < 3 ; i++)
         {
             if(temp_config.control_mode == 1) //手动模式
+            {
                 mode[i] = temp_config.lamp_mode[i];
+                value[i] = temp_config.lamp_value[i];
+            }
+                
             else
-                mode[i] = light_mode[i];
+            {
+                mode[i] = light_mode_auto[i];
+                value[i] = light_value_auto[i];
+            }
+                
         }            
 
         for(int i = 0 ; i < 3 ; i++)
@@ -145,7 +181,7 @@ void vTaskLightCode( void * pvParameters )
                 break;
                 case 1:
                 {
-                    Set_Lighteness((LightType_t)i , Get_value_from_light(light));
+                    Set_Lighteness((LightType_t)i , value[i] * 10);
                 }
                 break;
                 case 2:
@@ -157,7 +193,7 @@ void vTaskLightCode( void * pvParameters )
                         if(Get_Lighteness((LightType_t)i))
                             Set_Lighteness((LightType_t)i , 0);
                         else
-                            Set_Lighteness((LightType_t)i , Get_value_from_light(light));
+                            Set_Lighteness((LightType_t)i , value[i] * 10);
                     }
                 }
                 break;
@@ -170,7 +206,7 @@ void vTaskLightCode( void * pvParameters )
                         if(Get_Lighteness((LightType_t)i))
                             Set_Lighteness((LightType_t)i , 0);
                         else
-                            Set_Lighteness((LightType_t)i , Get_value_from_light(light));
+                            Set_Lighteness((LightType_t)i , value[i] * 10);
                     }                        
                 }
                 break;
@@ -183,7 +219,7 @@ void vTaskLightCode( void * pvParameters )
                         if(Get_Lighteness((LightType_t)i))
                             Set_Lighteness((LightType_t)i , 0);
                         else
-                            Set_Lighteness((LightType_t)i , Get_value_from_light(light));
+                            Set_Lighteness((LightType_t)i , value[i] * 10);
                     }                        
                 }
                 break;

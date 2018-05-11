@@ -21,9 +21,12 @@ typedef enum
     RED
 }LightType_t;
 
+extern float adc[TOTAL_CHANNEL];
+
 void DIDO_Init(void);
 void Set_Lighteness(LightType_t lighttype , uint16_t lighteness);
 uint16_t Get_Lighteness(LightType_t lighttype);
 
-
+void ADC_Poll(void);
+void Get_current(float adc_value[]);
 #endif

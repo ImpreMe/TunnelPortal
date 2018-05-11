@@ -14,8 +14,8 @@ static uint8_t try_times = 0;
 /*该部分均在main.c中定义*/
 extern SemaphoreHandle_t xConfig_mutex;
 extern SemaphoreHandle_t xReset_seam;
-extern void Get_mode_from_num(uint16_t num , uint8_t array[]);
-extern uint16_t Get_value_from_light(uint32_t light_value);
+extern void Get_mode_from_num(uint16_t num , Config_t config,uint8_t array[]);
+extern void Get_value_from_light(uint32_t light_value ,Config_t config ,uint8_t lamp_value[]);
 
 static Config_t g_tConfig = {0};
 
@@ -68,7 +68,9 @@ void Config_Init(void)
         {
             memset(&g_tConfig,0,sizeof(Config_t));
             g_tConfig.control_mode = 0;
-            g_tConfig.control_period = 1;      
+            g_tConfig.control_period = 1; 
+            g_tConfig.threshold1 = 5;
+            g_tConfig.threshold2 = 15;
         }
         else
             EEPROM_Write(CONFIG_ADDR, &g_tConfig, sizeof(Config_t));
@@ -236,16 +238,19 @@ static void get_light(pDataFrame_t ppkg)
     if(!Get_Config(&temp_config))
     {
         uint8_t temp_mode[3];
+        uint8_t temp_lamp[3];
+        
         uint32_t temp_light = Get_Light();
         uint16_t car_num = get_car_num(); 
         if(temp_config.control_mode == 0)
         {
-            Get_mode_from_num(car_num , temp_mode);
+            Get_mode_from_num(car_num , temp_config,temp_mode);
+            Get_value_from_light(temp_light , temp_config,temp_lamp);
         }
         for(int i = 0 ; i < 3 ; i++)
         {
             data.data[i*2] = temp_config.control_mode > 0 ? temp_config.lamp_mode[i] : temp_mode[i];
-            data.data[i*2 + 1] = temp_config.control_mode > 0 ? temp_config.lamp_value[i] : Get_value_from_light(temp_light)/10;
+            data.data[i*2 + 1] = temp_config.control_mode > 0 ? temp_config.lamp_value[i] : temp_lamp[i];
         }
     }
     Comm_Send(&data , data.length , STATUS_TX_NOREPLY);
@@ -285,12 +290,14 @@ static void get_contfreq(pDataFrame_t ppkg)
     data.srcID = ppkg->destID;
     data.head = ppkg->head;
     data.number = ppkg->number;
-    data.length = 12 + 2;  //固定12字节 + 成功或者失败的标志
+    data.length = 12 + 4;  //固定12字节 + 成功或者失败的标志
     Config_t temp_config ;
     if(!Get_Config(&temp_config))
     {
         data.data[0] = (uint8_t)(temp_config.control_period >> 0);
         data.data[1] = (uint8_t)(temp_config.control_period >> 8);
+        data.data[2] = temp_config.threshold1;
+        data.data[3] = temp_config.threshold2;
     }
     Comm_Send(&data , data.length , STATUS_TX_NOREPLY);      
 }
@@ -309,6 +316,8 @@ static void set_contfreq(pDataFrame_t ppkg)
     if(!Get_Config(&temp_config))
     {
         temp_config.control_period = (ppkg->data[0]) | (ppkg->data[1] << 8);
+        temp_config.threshold1 = ppkg->data[2];
+        temp_config.threshold2 = ppkg->data[3];
         data.data[0] = Set_Config(temp_config);
     }
     Comm_Send(&data , data.length , STATUS_TX_NOREPLY);      
@@ -322,33 +331,49 @@ static void get_status(pDataFrame_t ppkg)
     data.srcID = ppkg->destID;
     data.head = ppkg->head;
     data.number = ppkg->number;
-    data.length = 12 + 15;  //固定12字节 + 三组灯光的状态值
+    data.length = 12 + 29;  //固定12字节 + 三组灯光的状态值
     Config_t temp_config ;
     if(!Get_Config(&temp_config))
     {
         uint8_t temp_mode[3];
+        uint8_t temp_lamp[3];
+        
         uint32_t temp_light = Get_Light();
         uint16_t car_num = get_car_num(); 
         
-        data.data[0] = (uint8_t)(car_num >> 8);
-        data.data[1] = (uint8_t)(car_num >> 0);
-        data.data[2] = (uint8_t)(temp_light >> 24);
-        data.data[3] = (uint8_t)(temp_light >> 16);
-        data.data[4] = (uint8_t)(temp_light >> 8);
-        data.data[5] = (uint8_t)(temp_light >> 0);
+        data.data[0] = (uint8_t)(car_num >> 0);
+        data.data[1] = (uint8_t)(car_num >> 8);
+        data.data[2] = (uint8_t)(temp_light >> 0);
+        data.data[3] = (uint8_t)(temp_light >> 8);
+        data.data[4] = (uint8_t)(temp_light >> 16);
+        data.data[5] = (uint8_t)(temp_light >> 24);
         data.data[6] = temp_config.control_mode;
         
         if(temp_config.control_mode == 0)
         {
-            Get_mode_from_num(car_num , temp_mode);
+            Get_mode_from_num(car_num ,temp_config, temp_mode);
+            Get_value_from_light(temp_light , temp_config,temp_lamp);
         }        
         for(int i = 0 ; i < 3 ; i++)
         {
             data.data[7 + i*2] = temp_config.control_mode > 0 ? temp_config.lamp_mode[i] : temp_mode[i];
-            data.data[7 + i*2 + 1] = temp_config.control_mode > 0 ? temp_config.lamp_value[i] : Get_value_from_light(temp_light)/10;
+            data.data[7 + i*2 + 1] = temp_config.control_mode > 0 ? temp_config.lamp_value[i] : temp_lamp[i];
         }
-        data.data[13] = (uint8_t)(temp_config.control_period >> 8);
-        data.data[14] = (uint8_t)(temp_config.control_period >> 0);
+        data.data[13] = (uint8_t)(temp_config.control_period >> 0);
+        data.data[14] = (uint8_t)(temp_config.control_period >> 8);
+        
+        data.data[15] = temp_config.threshold1;
+        data.data[16] = temp_config.threshold2;
+        
+        float current_value[3] = {0};
+        Get_current(current_value);
+        for(int i = 0 ; i < sizeof(current_value) / sizeof(float) ; i++)
+        {
+            data.data[17 + i*4]     = ((int)current_value[i]);
+            data.data[17 + i*4 + 1] = ((int)current_value[i] >> 8);
+            data.data[17 + i*4 + 2] = ((int)current_value[i] >> 16);
+            data.data[17 + i*4 + 3] = ((int)current_value[i] >> 24);
+        }
     }
     Comm_Send(&data , data.length , STATUS_TX_NOREPLY);
 }
@@ -367,6 +392,61 @@ static void reset(pDataFrame_t ppkg)
     xSemaphoreGive( xReset_seam );
 }
 
+static void Auto_report(void)
+{
+    static uint16_t pkg_num = 0;
+    Config_t temp_config ;
+    if(Get_Config(&temp_config))
+        return;
+    DataFrame_t data;
+    data.head = 0x55AA;
+    data.cmd = CMD_UP_DATA;
+    data.destID = 0xFFFF;
+    data.srcID = temp_config.deviceid;
+    data.number = pkg_num++;
+    data.length = 12 + 29;  //固定12字节 + 三组灯光的状态值
+    
+
+    uint8_t temp_mode[3];
+    uint8_t temp_lamp[3];
+    
+    uint32_t temp_light = Get_Light();
+    uint16_t car_num = get_car_num(); 
+    
+    data.data[0] = (uint8_t)(car_num >> 0);
+    data.data[1] = (uint8_t)(car_num >> 8);
+    data.data[2] = (uint8_t)(temp_light >> 0);
+    data.data[3] = (uint8_t)(temp_light >> 8);
+    data.data[4] = (uint8_t)(temp_light >> 16);
+    data.data[5] = (uint8_t)(temp_light >> 24);
+    data.data[6] = temp_config.control_mode;
+    
+    if(temp_config.control_mode == 0)
+    {
+        Get_mode_from_num(car_num , temp_config,temp_mode);
+        Get_value_from_light(temp_light , temp_config,temp_lamp);
+    }        
+    for(int i = 0 ; i < 3 ; i++)
+    {
+        data.data[7 + i*2] = temp_config.control_mode > 0 ? temp_config.lamp_mode[i] : temp_mode[i];
+        data.data[7 + i*2 + 1] = temp_config.control_mode > 0 ? temp_config.lamp_value[i] : temp_lamp[i];
+    }
+    data.data[13] = (uint8_t)(temp_config.control_period >> 0);
+    data.data[14] = (uint8_t)(temp_config.control_period >> 8);
+    data.data[15] = temp_config.threshold1;
+    data.data[16] = temp_config.threshold2;
+    
+    float current_value[3] = {0};
+    Get_current(current_value);
+    for(int i = 0 ; i < sizeof(current_value) / sizeof(float) ; i++)
+    {
+        data.data[17 + i*4]     = ((int)current_value);
+        data.data[17 + i*4 + 1] = ((int)current_value >> 8);
+        data.data[17 + i*4 + 2] = ((int)current_value >> 16);
+        data.data[17 + i*4 + 3] = ((int)current_value >> 24);
+    }
+    Comm_Send(&data , data.length , STATUS_TX_NOREPLY);    
+}
 static void Analysis_data(uint8_t* buf , uint16_t len)
 {
     while( buf[0] != 0xAA || buf[1] != 0x55)
@@ -500,11 +580,14 @@ void vTaskCommCode( void * pvParameters )
         if((xTaskGetTickCount() - last_report) > 1 * 60 * 1000)
         {
             /*上报一次当前数据*/
+            Auto_report();
+            last_report = xTaskGetTickCount();
             //Comm_Send(const void * buf , uint16_t len , STATUS_TX_NOREPLY);
         }
-        Comm_Poll();
+        Comm_Poll();        
         Light_Poll();
         check_poll();
-        vTaskDelay(pdMS_TO_TICKS(10));
+        ADC_Poll();
+        vTaskDelay(pdMS_TO_TICKS(20));
     }
 }

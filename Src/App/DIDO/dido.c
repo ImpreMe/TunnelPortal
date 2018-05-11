@@ -17,7 +17,7 @@ static TIM_HandleTypeDef htim8;
 
 void DIDO_Init(void)
 {
-    MX_PWM_Init();
+    //MX_PWM_Init();
     MX_ADC1_Init();
 }
 
@@ -117,7 +117,7 @@ void DMA1_Channel1_IRQHandler(void)
     HAL_DMA_IRQHandler(&hdma_adc1);
 }
 
-float adc[TOTAL_CHANNEL];
+static float adc[TOTAL_CHANNEL];
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
     static uint16_t Average_array[AVERAGE_NUM][TOTAL_CHANNEL] = {0};
@@ -147,6 +147,23 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
     
 }
 
+
+static float current[3] = {0};
+void ADC_Poll(void)
+{
+    for(int i = 0 ; i < 3 ; i++)
+    {
+        current[i] = (2.5 -  (adc[i]/4096 * 3.3)) * 6.67;
+    }
+}
+
+void Get_current(float adc_value[])
+{
+    for(int i = 0 ; i < sizeof(current) / sizeof(float) ; i++)
+    {
+        adc_value[i] = current[i];
+    }
+}
 /**
     TIM1 : APB2总线，72MHz  >> CH1_CTR
     TIM5 : APB1总线，72MHz  >> CH2_CTR
