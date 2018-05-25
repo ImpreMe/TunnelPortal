@@ -6,6 +6,7 @@ void vTaskLightCode( void * pvParameters );
 
 SemaphoreHandle_t xConfig_mutex;
 SemaphoreHandle_t xReset_seam;
+
 int main (void)
 {
     HAL_Init();
@@ -161,13 +162,11 @@ void vTaskLightCode( void * pvParameters )
                 mode[i] = temp_config.lamp_mode[i];
                 value[i] = temp_config.lamp_value[i];
             }
-                
             else
             {
                 mode[i] = light_mode_auto[i];
                 value[i] = light_value_auto[i];
             }
-                
         }            
 
         for(int i = 0 ; i < 3 ; i++)
