@@ -21,22 +21,22 @@
 #ifndef __SX1276_HAL_H__
 #define __SX1276_HAL_H__
 
-#include "ioe.h"
+#include "FreeRTOS.h"
 
 /*!
  * DIO state read functions mapping
  */
 #define DIO0                                        SX1276ReadDio0( )
-#define DIO1                                        SX1276ReadDio1( )
-#define DIO2                                        SX1276ReadDio2( )
-#define DIO3                                        SX1276ReadDio3( )
-#define DIO4                                        SX1276ReadDio4( )
-#define DIO5                                        SX1276ReadDio5( )
+//#define DIO1                                        SX1276ReadDio1( )
+//#define DIO2                                        SX1276ReadDio2( )
+//#define DIO3                                        SX1276ReadDio3( )
+//#define DIO4                                        SX1276ReadDio4( )
+//#define DIO5                                        SX1276ReadDio5( )
 
 // RXTX pin control see errata note
-#define RXTX( txEnable )                            SX1276WriteRxTx( txEnable );
+//#define RXTX( txEnable )                            SX1276WriteRxTx( txEnable );
 
-#define GET_TICK_COUNT( )                           ( TickCounter )
+#define GET_TICK_COUNT( )                           ( xTaskGetTickCount() )
 #define TICK_RATE_MS( ms )                          ( ms )
 
 typedef enum
@@ -119,35 +119,35 @@ inline uint8_t SX1276ReadDio0( void );
  *
  * \retval status Current hardware pin status [1, 0]
  */
-inline uint8_t SX1276ReadDio1( void );
+//inline uint8_t SX1276ReadDio1( void );
 
 /*!
  * \brief Gets the SX1276 DIO2 hardware pin status
  *
  * \retval status Current hardware pin status [1, 0]
  */
-inline uint8_t SX1276ReadDio2( void );
+//inline uint8_t SX1276ReadDio2( void );
 
 /*!
  * \brief Gets the SX1276 DIO3 hardware pin status
  *
  * \retval status Current hardware pin status [1, 0]
  */
-inline uint8_t SX1276ReadDio3( void );
+//inline uint8_t SX1276ReadDio3( void );
 
 /*!
  * \brief Gets the SX1276 DIO4 hardware pin status
  *
  * \retval status Current hardware pin status [1, 0]
  */
-inline uint8_t SX1276ReadDio4( void );
+//inline uint8_t SX1276ReadDio4( void );
 
 /*!
  * \brief Gets the SX1276 DIO5 hardware pin status
  *
  * \retval status Current hardware pin status [1, 0]
  */
-inline uint8_t SX1276ReadDio5( void );
+//inline uint8_t SX1276ReadDio5( void );
 
 /*!
  * \brief Writes the external RxTx pin value
@@ -156,6 +156,6 @@ inline uint8_t SX1276ReadDio5( void );
  *
  * \param [IN] txEnable [1: Tx, 0: Rx]
  */
-inline void SX1276WriteRxTx( uint8_t txEnable );
+//inline void SX1276WriteRxTx( uint8_t txEnable );
 
 #endif //__SX1276_HAL_H__

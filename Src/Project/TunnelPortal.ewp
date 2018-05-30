@@ -2173,9 +2173,6 @@
   </group>
   <group>
     <name>LoRa</name>
-    <excluded>
-      <configuration>Debug</configuration>
-    </excluded>
     <file>
       <name>$PROJ_DIR$\..\App\Lora\platform.h</name>
     </file>
@@ -2184,6 +2181,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\App\Lora\radio.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276-Hal.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\App\Lora\sx1276-Hal.h</name>

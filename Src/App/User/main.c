@@ -1,11 +1,14 @@
 #include "includes.h"
 
 
-void vTaskDemoCode( void * pvParameters );
+void vTaskLoraCode( void * pvParameters );
 void vTaskLightCode( void * pvParameters );
 
 SemaphoreHandle_t xConfig_mutex;
 SemaphoreHandle_t xReset_seam;
+
+
+
 
 int main (void)
 {
@@ -17,39 +20,18 @@ int main (void)
     Light_Init();
     check_init();
     DIDO_Init();
-//        GPIO_InitTypeDef GPIO_InitStruct;
-//        __HAL_RCC_GPIOA_CLK_ENABLE();
-//        /**TIM1 GPIO Configuration    
-//        PA8     ------> TIM1_CH1 
-//        */
-//        GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_8;
-//        GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-//        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-//        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);  
-//        
-//        __HAL_RCC_GPIOC_CLK_ENABLE();
-//        /**TIM1 GPIO Configuration    
-//        PA8     ------> TIM1_CH1 
-//        */
-//        GPIO_InitStruct.Pin = GPIO_PIN_6;
-//        GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-//        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-//        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-//        
-//        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_8, GPIO_PIN_SET);
-//        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
     
     BaseType_t err;
-    TaskHandle_t xHandleDemo;
-    err = xTaskCreate( vTaskDemoCode,"demo",256,NULL,2,&xHandleDemo);
+    TaskHandle_t xHandleLora;
+    err = xTaskCreate( vTaskLoraCode,"lora",256,NULL,4,&xHandleLora);
     assert(err == pdPASS);
     
     TaskHandle_t xHandleComm;
-    err = xTaskCreate( vTaskCommCode,"comm",256,NULL,3,&xHandleComm);
+    err = xTaskCreate( vTaskCommCode,"comm",256,NULL,2,&xHandleComm);
     assert(err == pdPASS);
 
     TaskHandle_t xHandleLight;
-    err = xTaskCreate( vTaskLightCode,"light",256,NULL,4,&xHandleLight);
+    err = xTaskCreate( vTaskLightCode,"light",256,NULL,3,&xHandleLight);
     assert(err == pdPASS);
     
     xConfig_mutex = xSemaphoreCreateMutex();
@@ -63,22 +45,13 @@ int main (void)
 }
 
 
-void vTaskDemoCode( void * pvParameters )
+void vTaskLoraCode( void * pvParameters )
 {
     (void)pvParameters;
     
-//    uint8_t ttt[20] = {0};
-//    for(int i = 0 ; i < sizeof(ttt) ; i++)
-//        ttt[i] = i + 0x90;
-//    
-//    uint8_t rrr[20] = {0};
-//    
-//    EEPROM_Write(500,ttt,sizeof(ttt));
-//    EEPROM_Read(500,rrr,sizeof(rrr));
-    
     while(1)
     {
-        vTaskDelay(pdMS_TO_TICKS(100));
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
 
@@ -228,88 +201,3 @@ void vTaskLightCode( void * pvParameters )
         vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
-
-        
-        
-        
-        
-        
-//        if((xTaskGetTickCount() - last_control) > CONTROL_INTERVAL * 60 * 1000)
-//        {
-//            last_control = xTaskGetTickCount();
-//            
-//            if(num < 5)
-//                interval = 500;
-//            else if(num < 15)
-//                interval = 375;   
-//            else 
-//                interval = 250;
-//        }
-//
-//        if(interval == 0) //长亮,隧道关闭，红灯长亮
-//        {
-//            Set_Lighteness(YELLOW , 0);
-//            Set_Lighteness(WHITE , 0);
-//            if(light < 100)
-//                Set_Lighteness(RED , 100);
-//            else if(light < 300)
-//                Set_Lighteness(RED , 300);
-//            else if(light < 800)
-//                Set_Lighteness(RED , 600);
-//            
-//            vTaskDelay(pdMS_TO_TICKS(100));
-//        }
-//        else if(interval == 500) //车流量小,白灯1Hz
-//        {
-//            Set_Lighteness(RED , 0);
-//            Set_Lighteness(YELLOW , 0);
-//            if(Get_Lighteness(WHITE))
-//                Set_Lighteness(WHITE , 0);
-//            else
-//            {
-//                if(light < 100)
-//                    Set_Lighteness(WHITE , 100);
-//                else if(light < 300)
-//                    Set_Lighteness(WHITE , 300);
-//                else
-//                    Set_Lighteness(WHITE , 600);
-//            }
-//            vTaskDelay(pdMS_TO_TICKS(interval));
-//        }
-//        else if(interval == 375)//车流量中,黄灯1.5Hz
-//        {
-//            Set_Lighteness(RED , 0);
-//            Set_Lighteness(WHITE , 0);
-//            if(Get_Lighteness(YELLOW))
-//                Set_Lighteness(YELLOW , 0);
-//            else
-//            {
-//                if(light < 100)
-//                    Set_Lighteness(YELLOW , 100);
-//                else if(light < 300)
-//                    Set_Lighteness(YELLOW , 300);
-//                else
-//                    Set_Lighteness(YELLOW , 600);
-//            }
-//            vTaskDelay(pdMS_TO_TICKS(interval));            
-//        }
-//        else if(interval == 250)//车流量大,黄灯2Hz
-//        {
-//            Set_Lighteness(RED , 0);
-//            Set_Lighteness(WHITE , 0);
-//            if(Get_Lighteness(YELLOW))
-//                Set_Lighteness(YELLOW , 0);
-//            else
-//            {
-//                if(light < 100)
-//                    Set_Lighteness(YELLOW , 100);
-//                else if(light < 300)
-//                    Set_Lighteness(YELLOW , 300);
-//                else
-//                    Set_Lighteness(YELLOW , 600);
-//            }
-//            vTaskDelay(pdMS_TO_TICKS(50));
-//        }
-//            
-//    }
-//}

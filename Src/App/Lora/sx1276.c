@@ -40,7 +40,7 @@ static bool LoRaOnState = false;
 void SX1276Init( void )
 {
     // Initialize FSK and LoRa registers structure
-    SX1276 = ( tSX1276* )SX1276Regs;
+    //SX1276 = ( tSX1276* )SX1276Regs;
     SX1276LR = ( tSX1276LR* )SX1276Regs;
 
     SX1276InitIo( );
