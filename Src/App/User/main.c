@@ -3,6 +3,7 @@
 
 void vTaskLoraCode( void * pvParameters );
 void vTaskLightCode( void * pvParameters );
+void Radio_process(void);
 
 SemaphoreHandle_t xConfig_mutex;
 SemaphoreHandle_t xReset_seam;
@@ -44,11 +45,15 @@ int main (void)
     return 0;
 }
 
+tRadioDriver *Radio = NULL;
+#define BUFFER_SIZE                                 32 // Define the payload size here
+static uint16_t BufferSize = BUFFER_SIZE;			// RF buffer size
+static uint8_t Buffer[BUFFER_SIZE];					// RF buffer
 
 void vTaskLoraCode( void * pvParameters )
 {
     (void)pvParameters;
-    tRadioDriver *Radio = NULL;
+    
     
     Radio = RadioDriverInit( );
     
@@ -57,6 +62,7 @@ void vTaskLoraCode( void * pvParameters )
     Radio->StartRx( );
     while(1)
     {
+        Radio_process();
         vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
@@ -206,4 +212,34 @@ void vTaskLightCode( void * pvParameters )
         }                       
         vTaskDelay(pdMS_TO_TICKS(50));
     }
+}
+
+void Radio_process(void)
+{
+    switch( Radio->Process( ) )
+    {
+    case RF_RX_TIMEOUT: 
+        for( int i = 0; i < BufferSize; i++ )
+        {
+            Buffer[i] = i + 0x30;
+        }
+        Radio->SetTxPacket( Buffer, BufferSize ); //只是内存的复制，将应用层数据复制到lora的全局缓冲区RFBuffer
+        break;
+    case RF_RX_DONE:
+        Radio->GetRxPacket( Buffer, ( uint16_t* )&BufferSize ); //只是内存的复制，将应用层数据复制到lora的全局缓冲区RFBuffer
+        if( BufferSize > 0 )
+        {
+            for(int i = 0 ; i < BufferSize;i++)
+            {
+                Debug_Printf("%02x ",Buffer[i]);
+            }
+            Debug_Printf("\r\n");    
+        }            
+        break;
+    case RF_TX_DONE:
+        Radio->StartRx( );
+        break;
+    default:
+        break;
+    }    
 }
