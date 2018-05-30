@@ -99,15 +99,15 @@ const int32_t HoppingFrequencies[] =
 // Default settings
 tLoRaSettings LoRaSettings =
 {
-    870000000,        // RFFrequency
-    20,               // Power
-    9,                // SignalBw [0: 7.8kHz, 1: 10.4 kHz, 2: 15.6 kHz, 3: 20.8 kHz, 4: 31.2 kHz,
+    434000000,        // RFFrequency
+    17,               // Power
+    7,                // SignalBw [0: 7.8kHz, 1: 10.4 kHz, 2: 15.6 kHz, 3: 20.8 kHz, 4: 31.2 kHz,
                       // 5: 41.6 kHz, 6: 62.5 kHz, 7: 125 kHz, 8: 250 kHz, 9: 500 kHz, other: Reserved]
-    7,                // SpreadingFactor [6: 64, 7: 128, 8: 256, 9: 512, 10: 1024, 11: 2048, 12: 4096  chips]
+    8,                // SpreadingFactor [6: 64, 7: 128, 8: 256, 9: 512, 10: 1024, 11: 2048, 12: 4096  chips]
     2,                // ErrorCoding [1: 4/5, 2: 4/6, 3: 4/7, 4: 4/8]
     true,             // CrcOn [0: OFF, 1: ON]
     false,            // ImplicitHeaderOn [0: OFF, 1: ON]
-    1,                // RxSingleOn [0: Continuous, 1 Single]
+    0,                // RxSingleOn [0: Continuous, 1 Single]
     0,                // FreqHopOn [0: OFF, 1: ON]
     4,                // HopPeriod Hops every frequency hopping period symbols
     100,              // TxPacketTimeout
@@ -162,16 +162,25 @@ void SX1276LoRaInit( void )
 
     // set the RF settings 
     SX1276LoRaSetRFFrequency( LoRaSettings.RFFrequency );
-    SX1276LoRaSetSpreadingFactor( LoRaSettings.SpreadingFactor ); // SF6 only operates in implicit header mode.
-    SX1276LoRaSetErrorCoding( LoRaSettings.ErrorCoding );
-    SX1276LoRaSetPacketCrcOn( LoRaSettings.CrcOn );
+    SX1276LoRaSetSpreadingFactor( LoRaSettings.SpreadingFactor ); // SF6 only operates in implicit header mode.    
+    SX1276LoRaSetErrorCoding( LoRaSettings.ErrorCoding );   
+    SX1276LoRaSetPacketCrcOn( LoRaSettings.CrcOn );    
     SX1276LoRaSetSignalBandwidth( LoRaSettings.SignalBw );
 
-    SX1276LoRaSetImplicitHeaderOn( LoRaSettings.ImplicitHeaderOn );
+    SX1276LoRaSetImplicitHeaderOn( LoRaSettings.ImplicitHeaderOn );    
     SX1276LoRaSetSymbTimeout( 0x3FF );
     SX1276LoRaSetPayloadLength( LoRaSettings.PayloadLength );
-    SX1276LoRaSetLowDatarateOptimize( true );
+    SX1276LoRaSetLowDatarateOptimize( false );
 
+    //SX1276LoRaSetPreambleLength(4);
+    SX1276LoRaSetPAOutput( RFLR_PACONFIG_PASELECT_PABOOST );
+    SX1276LoRaSetPa20dBm( false );
+    LoRaSettings.Power = 17;
+    SX1276LoRaSetRFPower( LoRaSettings.Power );
+    
+    
+
+#if 0
 #if( ( MODULE_SX1276RF1IAS == 1 ) || ( MODULE_SX1276RF1KAS == 1 ) )
     if( LoRaSettings.RFFrequency > 860000000 )
     {
@@ -186,6 +195,8 @@ void SX1276LoRaInit( void )
         SX1276LoRaSetPa20dBm( true );
         LoRaSettings.Power = 20;
         SX1276LoRaSetRFPower( LoRaSettings.Power );
+        
+
     } 
 #elif( MODULE_SX1276RF1JAS == 1 )
     if( LoRaSettings.RFFrequency > 860000000 )
@@ -203,7 +214,7 @@ void SX1276LoRaInit( void )
         SX1276LoRaSetRFPower( LoRaSettings.Power );
     } 
 #endif
-
+#endif
     SX1276LoRaSetOpMode( RFLR_OPMODE_STANDBY );
 }
 
@@ -232,26 +243,26 @@ void SX1276LoRaReset( void )
 void SX1276LoRaSetOpMode( uint8_t opMode )
 {
     static uint8_t opModePrev = RFLR_OPMODE_STANDBY;
-    static bool antennaSwitchTxOnPrev = true;
-    bool antennaSwitchTxOn = false;
+//    static bool antennaSwitchTxOnPrev = true;
+//    bool antennaSwitchTxOn = false;
 
     opModePrev = SX1276LR->RegOpMode & ~RFLR_OPMODE_MASK;
 
     if( opMode != opModePrev )
     {
-        if( opMode == RFLR_OPMODE_TRANSMITTER )
-        {
-            antennaSwitchTxOn = true;
-        }
-        else
-        {
-            antennaSwitchTxOn = false;
-        }
-        if( antennaSwitchTxOn != antennaSwitchTxOnPrev )
-        {
-            antennaSwitchTxOnPrev = antennaSwitchTxOn;
-            RXTX( antennaSwitchTxOn ); // Antenna switch control
-        }
+//        if( opMode == RFLR_OPMODE_TRANSMITTER )
+//        {
+//            antennaSwitchTxOn = true;
+//        }
+//        else
+//        {
+//            antennaSwitchTxOn = false;
+//        }
+//        if( antennaSwitchTxOn != antennaSwitchTxOnPrev )
+//        {
+//            antennaSwitchTxOnPrev = antennaSwitchTxOn;
+//            RXTX( antennaSwitchTxOn ); // Antenna switch control
+//        }
         SX1276LR->RegOpMode = ( SX1276LR->RegOpMode & RFLR_OPMODE_MASK ) | opMode;
 
         SX1276Write( REG_LR_OPMODE, SX1276LR->RegOpMode );        
@@ -585,9 +596,9 @@ uint32_t SX1276LoRaProcess( void )
         SX1276LR->RegPayloadLength = TxPacketSize;
         SX1276Write( REG_LR_PAYLOADLENGTH, SX1276LR->RegPayloadLength );
         
-        SX1276LR->RegFifoTxBaseAddr = 0x00; // Full buffer used for Tx
+        SX1276LR->RegFifoTxBaseAddr = 0x80; // Full buffer used for Tx
         SX1276Write( REG_LR_FIFOTXBASEADDR, SX1276LR->RegFifoTxBaseAddr );
-
+        
         SX1276LR->RegFifoAddrPtr = SX1276LR->RegFifoTxBaseAddr;
         SX1276Write( REG_LR_FIFOADDRPTR, SX1276LR->RegFifoAddrPtr );
         
@@ -597,6 +608,7 @@ uint32_t SX1276LoRaProcess( void )
         SX1276LR->RegDioMapping1 = RFLR_DIOMAPPING1_DIO0_01 | RFLR_DIOMAPPING1_DIO1_00 | RFLR_DIOMAPPING1_DIO2_00 | RFLR_DIOMAPPING1_DIO3_01;
                                         // PllLock              Mode Ready
         SX1276LR->RegDioMapping2 = RFLR_DIOMAPPING2_DIO4_01 | RFLR_DIOMAPPING2_DIO5_00;
+        
         SX1276WriteBuffer( REG_LR_DIOMAPPING1, &SX1276LR->RegDioMapping1, 2 );
 
         SX1276LoRaSetOpMode( RFLR_OPMODE_TRANSMITTER );

@@ -48,7 +48,13 @@ int main (void)
 void vTaskLoraCode( void * pvParameters )
 {
     (void)pvParameters;
+    tRadioDriver *Radio = NULL;
     
+    Radio = RadioDriverInit( );
+    
+    Radio->Init( );
+
+    Radio->StartRx( );
     while(1)
     {
         vTaskDelay(pdMS_TO_TICKS(10));

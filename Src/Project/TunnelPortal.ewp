@@ -325,6 +325,7 @@
           <state>$PROJ_DIR$\..\App\COMM</state>
           <state>$PROJ_DIR$\..\App\Debug</state>
           <state>$PROJ_DIR$\..\App\CRC</state>
+          <state>$PROJ_DIR$\..\App\Lora</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -2181,6 +2182,18 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\App\Lora\radio.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276-Fsk.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276-Fsk.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276-FskMisc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\Lora\sx1276-FskMisc.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\App\Lora\sx1276-Hal.c</name>

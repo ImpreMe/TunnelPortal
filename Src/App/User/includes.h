@@ -17,6 +17,9 @@
 #include "dido.h"
 #include "debug.h"
 
+
+#include "radio.h"
+
 //#include  "usbd_hid_core.h"
 //#include  "usbd_customhid_core.h"
 //#include  "usbd_usr.h"

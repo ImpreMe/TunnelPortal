@@ -4,7 +4,7 @@
 #include "stdint.h"
 #include "stm32f1xx_hal.h"
 
-extern SPI_HandleTypeDef hspi1;
+extern SPI_HandleTypeDef hspi2;
 
 void BSP_SPI_Init(void);
 void BSP_SPI_TxRx(const uint8_t *pTxData, uint8_t *pRxData, uint16_t Size);
