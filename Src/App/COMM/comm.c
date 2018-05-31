@@ -588,6 +588,7 @@ void vTaskCommCode( void * pvParameters )
         Light_Poll();
         check_poll(g_tConfig.control_period);
         ADC_Poll();
+        TaskMonitor(USE_COMM_TASK);
         vTaskDelay(pdMS_TO_TICKS(20));
     }
 }

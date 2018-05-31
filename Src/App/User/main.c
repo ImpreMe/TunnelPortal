@@ -23,18 +23,21 @@ int main (void)
     DIDO_Init();
     
     BaseType_t err;
+#ifdef USE_LORA_TASK
     TaskHandle_t xHandleLora;
     err = xTaskCreate( vTaskLoraCode,"lora",256,NULL,4,&xHandleLora);
     assert(err == pdPASS);
-    
+#endif
+#ifdef USE_COMM_TASK
     TaskHandle_t xHandleComm;
     err = xTaskCreate( vTaskCommCode,"comm",256,NULL,2,&xHandleComm);
     assert(err == pdPASS);
-
+#endif
+#ifdef USE_LIGHT_TASK
     TaskHandle_t xHandleLight;
     err = xTaskCreate( vTaskLightCode,"light",256,NULL,3,&xHandleLight);
     assert(err == pdPASS);
-    
+#endif   
     xConfig_mutex = xSemaphoreCreateMutex();
     assert(xConfig_mutex != NULL);
     
@@ -63,6 +66,7 @@ void vTaskLoraCode( void * pvParameters )
     while(1)
     {
         Radio_process();
+        TaskMonitor(USE_LORA_TASK);
         vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
@@ -209,7 +213,8 @@ void vTaskLightCode( void * pvParameters )
                 break;
                 default : break;
             }
-        }                       
+        }
+        TaskMonitor(USE_LIGHT_TASK);
         vTaskDelay(pdMS_TO_TICKS(50));
     }
 }

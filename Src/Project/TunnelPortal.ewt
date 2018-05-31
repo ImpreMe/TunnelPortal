@@ -3013,6 +3013,12 @@
       <name>$PROJ_DIR$\..\App\User\main.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\App\User\monitor.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\App\User\monitor.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\App\User\stm32f1xx_hal_conf.h</name>
     </file>
   </group>
