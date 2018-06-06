@@ -1950,9 +1950,6 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\App\BSP\Include\bsp_led.h</name>
-        <excluded>
-          <configuration>Debug</configuration>
-        </excluded>
       </file>
       <file>
         <name>$PROJ_DIR$\..\App\BSP\Include\bsp_spi.h</name>
@@ -1974,9 +1971,6 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\App\BSP\Source\bsp_led.c</name>
-        <excluded>
-          <configuration>Debug</configuration>
-        </excluded>
       </file>
       <file>
         <name>$PROJ_DIR$\..\App\BSP\Source\bsp_spi.c</name>

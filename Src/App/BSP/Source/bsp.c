@@ -1,9 +1,7 @@
 
 
-#include  "bsp_clock.h"
-#include  "bsp_spi.h"
-//#include  "bsp_led.h"
-//#include  "bsp_os.h"
+
+#include  "bsp.h"
 
 #include  "stm32f1xx_hal.h"
 
@@ -28,6 +26,6 @@
 
 void  BSP_Init (void)
 {
-    //BSP_LED_Init();                                             /* Init LEDs.                                           */
+    BSP_LED_Init();                                             /* Init LEDs.                                           */
     BSP_SPI_Init();
 }

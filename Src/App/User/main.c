@@ -1,9 +1,8 @@
 #include "includes.h"
 
 
-void vTaskLoraCode( void * pvParameters );
+//void vTaskLoraCode( void * pvParameters );
 void vTaskLightCode( void * pvParameters );
-void Radio_process(void);
 
 SemaphoreHandle_t xConfig_mutex;
 SemaphoreHandle_t xReset_seam;
@@ -48,10 +47,43 @@ int main (void)
     return 0;
 }
 
+#ifdef USE_LORA_TASK
+
+
 tRadioDriver *Radio = NULL;
 #define BUFFER_SIZE                                 32 // Define the payload size here
 static uint16_t BufferSize = BUFFER_SIZE;			// RF buffer size
 static uint8_t Buffer[BUFFER_SIZE];					// RF buffer
+
+void Radio_process(void)
+{
+    switch( Radio->Process( ) )
+    {
+    case RF_RX_TIMEOUT: 
+        for( int i = 0; i < BufferSize; i++ )
+        {
+            Buffer[i] = i + 0x30;
+        }
+        Radio->SetTxPacket( Buffer, BufferSize ); //只是内存的复制，将应用层数据复制到lora的全局缓冲区RFBuffer
+        break;
+    case RF_RX_DONE:
+        Radio->GetRxPacket( Buffer, ( uint16_t* )&BufferSize ); //只是内存的复制，将应用层数据复制到lora的全局缓冲区RFBuffer
+        if( BufferSize > 0 )
+        {
+            for(int i = 0 ; i < BufferSize;i++)
+            {
+                Debug_Printf("%02x ",Buffer[i]);
+            }
+            Debug_Printf("\r\n");    
+        }            
+        break;
+    case RF_TX_DONE:
+        Radio->StartRx( );
+        break;
+    default:
+        break;
+    }    
+}
 
 void vTaskLoraCode( void * pvParameters )
 {
@@ -70,6 +102,7 @@ void vTaskLoraCode( void * pvParameters )
         vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
+#endif
 
 void Get_mode_from_num(uint16_t num ,Config_t config, uint8_t array[])
 {
@@ -101,11 +134,36 @@ void Get_value_from_light(uint32_t light_value ,Config_t config,uint8_t lamp_val
     lamp_value[2] = 100;
 }
 
-
+static uint16_t green_mode(uint8_t array[])
+{
+    uint8_t max = 0;
+    for(int i = 0 ; i < 3 ; i++)
+    {
+        if(max < array[i])
+            max = array[i];
+    }
+    switch(max)
+    {
+        case 0:
+            return 0;
+        case 1:
+            return 1;
+        case 2:
+            return 1000;
+        case 3:
+            return 500;
+        case 4:
+            return 250;
+        default :
+            return 0;
+    }
+}
 void vTaskLightCode( void * pvParameters )
 {
     (void)pvParameters;
     //Set_Lighteness(WHITE , 200);
+    static uint32_t last_green = 0;
+    
     Config_Init();
     
     static uint32_t last_control = 0;
@@ -113,13 +171,14 @@ void vTaskLightCode( void * pvParameters )
     uint16_t num ;      //当前环境车流量数据
     Config_t temp_config;
     
-    uint8_t light_mode_auto[3] = {2,0,0}; //自动条件下用来计算临时模式的数组
+    uint8_t light_mode_auto[3] = {4,0,0}; //自动条件下用来计算临时模式的数组
     uint8_t light_value_auto[3] = {50,50,50}; //自动条件下用来计算临时模式的数组
     
     uint8_t iCount[3] = {0};
     
     uint8_t mode[3] = {0xFF , 0xFF , 0xFF}; //灯光工作模式（统一入口）
     uint8_t value[3] = {50,50,50};          //灯光亮度（统一入口）
+    uint16_t green_mode_value = 0;
     while(1)
     {
         if(Get_Config(&temp_config))
@@ -195,7 +254,7 @@ void vTaskLightCode( void * pvParameters )
                             Set_Lighteness((LightType_t)i , 0);
                         else
                             Set_Lighteness((LightType_t)i , value[i] * 10);
-                    }                        
+                    }
                 }
                 break;
                 case 4:
@@ -208,43 +267,28 @@ void vTaskLightCode( void * pvParameters )
                             Set_Lighteness((LightType_t)i , 0);
                         else
                             Set_Lighteness((LightType_t)i , value[i] * 10);
-                    }                        
+                    }
                 }
                 break;
                 default : break;
             }
         }
+        green_mode_value = green_mode(mode); //绿色指示灯的闪烁状态
+        if(green_mode_value == 0)
+            BSP_LED_Off (LIGHT_GREEN);
+        else if(green_mode_value == 1)
+            BSP_LED_On (LIGHT_GREEN);
+        else
+        {
+            if(xTaskGetTickCount() - last_green > green_mode_value)
+            {
+                last_green = xTaskGetTickCount();
+                BSP_LED_Toggle (LIGHT_GREEN);
+            }
+        }
+        
         TaskMonitor(USE_LIGHT_TASK);
         vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
 
-void Radio_process(void)
-{
-    switch( Radio->Process( ) )
-    {
-    case RF_RX_TIMEOUT: 
-        for( int i = 0; i < BufferSize; i++ )
-        {
-            Buffer[i] = i + 0x30;
-        }
-        Radio->SetTxPacket( Buffer, BufferSize ); //只是内存的复制，将应用层数据复制到lora的全局缓冲区RFBuffer
-        break;
-    case RF_RX_DONE:
-        Radio->GetRxPacket( Buffer, ( uint16_t* )&BufferSize ); //只是内存的复制，将应用层数据复制到lora的全局缓冲区RFBuffer
-        if( BufferSize > 0 )
-        {
-            for(int i = 0 ; i < BufferSize;i++)
-            {
-                Debug_Printf("%02x ",Buffer[i]);
-            }
-            Debug_Printf("\r\n");    
-        }            
-        break;
-    case RF_TX_DONE:
-        Radio->StartRx( );
-        break;
-    default:
-        break;
-    }    
-}

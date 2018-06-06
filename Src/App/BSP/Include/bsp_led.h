@@ -51,8 +51,7 @@
 *********************************************************************************************************
 */
 
-#include  <cpu_core.h>
-
+#include <stdint.h>
 
 /*
 *********************************************************************************************************
@@ -87,11 +86,14 @@ extern  "C" {                                  /* See Note #1.                  
 *                                         FUNCTION PROTOTYPES
 *********************************************************************************************************
 */
-
+#define LIGHT_ALL        0
+#define LIGHT_RED        1    
+#define LIGHT_GREEN      2
+    
 void  BSP_LED_Init  (void);
-void  BSP_LED_On    (CPU_INT08U  led);
-void  BSP_LED_Off   (CPU_INT08U  led);
-void  BSP_LED_Toggle(CPU_INT08U  led);
+void  BSP_LED_On    (uint8_t  led);
+void  BSP_LED_Off   (uint8_t  led);
+void  BSP_LED_Toggle(uint8_t  led);
 
 
 /*

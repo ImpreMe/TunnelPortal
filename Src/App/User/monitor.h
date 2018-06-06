@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define USE_LORA_TASK     0
+//#define USE_LORA_TASK     0
 #define USE_COMM_TASK     1
 #define USE_LIGHT_TASK    2
 

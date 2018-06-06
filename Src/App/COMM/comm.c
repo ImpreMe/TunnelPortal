@@ -67,10 +67,10 @@ void Config_Init(void)
         if(crc_back != g_tConfig.crc16)
         {
             memset(&g_tConfig,0,sizeof(Config_t));
-            g_tConfig.control_mode = 0;
-            g_tConfig.control_period = 1; 
-            g_tConfig.threshold1 = 5;
-            g_tConfig.threshold2 = 15;
+            g_tConfig.control_mode = 0;    //自动控制
+            g_tConfig.control_period = 1;  //一分钟控制一次
+            g_tConfig.threshold1 = 5;      //闪烁频率的阈值1
+            g_tConfig.threshold2 = 15;     //闪烁频率的阈值2
         }
         else
             EEPROM_Write(CONFIG_ADDR, &g_tConfig, sizeof(Config_t));
@@ -504,6 +504,7 @@ void Comm_Send(const void * buf , uint16_t len , CommStatus_t mod)
     Set_CommStatus(mod); 
 }
 
+static volatile uint8_t send_flag = 0;
 static void Comm_Poll(void)
 {
     static uint32_t send_time_tick = 0;
@@ -527,11 +528,13 @@ static void Comm_Poll(void)
             HAL_UART_Transmit(&huart4, tx_comm_buf, tx_comm_index, 500);
             send_time_tick = xTaskGetTickCount();
             Comm_Status = STATUS_RX;
+            send_flag = 1;
             break;
         case STATUS_TX_NOREPLY :
             /* 发送数据 */
             HAL_UART_Transmit(&huart4, tx_comm_buf, tx_comm_index, 500);
             Comm_Status = STATUS_IDLE;
+            send_flag = 1;
             if(xSemaphoreTake( xReset_seam, 0 ) == pdPASS)
             {
                 __disable_irq();   
@@ -574,9 +577,19 @@ void vTaskCommCode( void * pvParameters )
     (void)pvParameters;
     static uint32_t last_report = 0;
 
-        
+    uint8_t send_time = 0;
     while(1)
     {
+        if(send_flag == 1)
+        {
+            BSP_LED_Toggle (LIGHT_RED);
+            send_time++;
+            if(send_time >= 10)
+            {
+                send_flag = 0;
+                BSP_LED_Off (LIGHT_RED);
+            }
+        }
         if((xTaskGetTickCount() - last_report) > 1 * 60 * 1000)
         {
             /*上报一次当前数据*/
@@ -584,7 +597,7 @@ void vTaskCommCode( void * pvParameters )
             last_report = xTaskGetTickCount();
             //Comm_Send(const void * buf , uint16_t len , STATUS_TX_NOREPLY);
         }
-        Comm_Poll();        
+        Comm_Poll();
         Light_Poll();
         check_poll(g_tConfig.control_period);
         ADC_Poll();

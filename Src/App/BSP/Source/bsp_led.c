@@ -50,8 +50,12 @@
 *********************************************************************************************************
 */
 
-#define  BSP_LED2_GPIOI_PIN                       DEF_BIT_07
-#define  BSP_LED3_GPIOI_PIN                       DEF_BIT_08
+#define  BSP_LED_RED_PIN                         GPIO_PIN_4
+#define  BSP_LED_GREEN_PIN                       GPIO_PIN_5
+
+
+#define  BSP_LED_RED_PORT                        GPIOB
+#define  BSP_LED_GREEN_PORT                      GPIOB
 
 /*
 *********************************************************************************************************
@@ -109,15 +113,16 @@ void  BSP_LED_Init (void)
 {
     GPIO_InitTypeDef  gpio_init;
 
+    __HAL_RCC_AFIO_CLK_ENABLE();
+    __HAL_RCC_GPIOB_CLK_ENABLE();                               /* Enable GPIO clock for LED2(PG3)                      */
 
-    __HAL_RCC_GPIOF_CLK_ENABLE();                               /* Enable GPIO clock for LED2(PG3)                      */
-
+    __HAL_AFIO_REMAP_SWJ_NOJTAG();
                                                                 /* Configure the GPIOB for LED1(PB8) and LED3(PB4)      */
-    gpio_init.Pin   = BSP_LED2_GPIOI_PIN | BSP_LED3_GPIOI_PIN;
+    gpio_init.Pin   = BSP_LED_RED_PIN | BSP_LED_GREEN_PIN;
     gpio_init.Mode  = GPIO_MODE_OUTPUT_PP;
     gpio_init.Pull  = GPIO_PULLUP;
-    gpio_init.Speed = GPIO_SPEED_HIGH;
-    HAL_GPIO_Init(GPIOF, &gpio_init);
+    gpio_init.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOB, &gpio_init);
 
     BSP_LED_Off(0u);
 }
@@ -142,22 +147,22 @@ void  BSP_LED_Init (void)
 *********************************************************************************************************
 */
 
-void  BSP_LED_Off (CPU_INT08U  led)
+void  BSP_LED_Off (uint8_t  led)
 {
     switch (led) {
         case 0u:
-             HAL_GPIO_WritePin(GPIOF, BSP_LED2_GPIOI_PIN, GPIO_PIN_SET);
-             HAL_GPIO_WritePin(GPIOF, BSP_LED3_GPIOI_PIN, GPIO_PIN_SET);
+             HAL_GPIO_WritePin(GPIOB, BSP_LED_RED_PIN, GPIO_PIN_SET);
+             HAL_GPIO_WritePin(GPIOB, BSP_LED_GREEN_PIN, GPIO_PIN_SET);
              break;
 
 
         case 1u:
-             HAL_GPIO_WritePin(GPIOF, BSP_LED2_GPIOI_PIN, GPIO_PIN_SET);
+             HAL_GPIO_WritePin(GPIOB, BSP_LED_RED_PIN, GPIO_PIN_SET);
              break;
 
              
         case 2u:
-             HAL_GPIO_WritePin(GPIOF, BSP_LED3_GPIOI_PIN, GPIO_PIN_SET);
+             HAL_GPIO_WritePin(GPIOB, BSP_LED_GREEN_PIN, GPIO_PIN_SET);
              break;
 
         default:
@@ -184,22 +189,22 @@ void  BSP_LED_Off (CPU_INT08U  led)
 *********************************************************************************************************
 */
 
-void  BSP_LED_On (CPU_INT08U  led)
+void  BSP_LED_On (uint8_t  led)
 {
     switch (led) {
         case 0u:
-             HAL_GPIO_WritePin(GPIOF, BSP_LED2_GPIOI_PIN, GPIO_PIN_RESET);
-             HAL_GPIO_WritePin(GPIOF, BSP_LED3_GPIOI_PIN, GPIO_PIN_RESET);
+             HAL_GPIO_WritePin(GPIOB, BSP_LED_RED_PIN, GPIO_PIN_RESET);
+             HAL_GPIO_WritePin(GPIOB, BSP_LED_GREEN_PIN, GPIO_PIN_RESET);
              break;
 
 
         case 1u:
-             HAL_GPIO_WritePin(GPIOF, BSP_LED2_GPIOI_PIN, GPIO_PIN_RESET);
+             HAL_GPIO_WritePin(GPIOB, BSP_LED_RED_PIN, GPIO_PIN_RESET);
              break;
 
              
         case 2u:
-             HAL_GPIO_WritePin(GPIOF, BSP_LED3_GPIOI_PIN, GPIO_PIN_RESET);
+             HAL_GPIO_WritePin(GPIOB, BSP_LED_GREEN_PIN, GPIO_PIN_RESET);
              break;
 
         default:
@@ -227,21 +232,21 @@ void  BSP_LED_On (CPU_INT08U  led)
 *********************************************************************************************************
 */
 
-void  BSP_LED_Toggle (CPU_INT08U  led)
+void  BSP_LED_Toggle (uint8_t  led)
 {
     switch (led) {
         case 0u:
-             HAL_GPIO_TogglePin(GPIOF, BSP_LED2_GPIOI_PIN);
-             HAL_GPIO_TogglePin(GPIOF, BSP_LED3_GPIOI_PIN);
+             HAL_GPIO_TogglePin(GPIOB, BSP_LED_RED_PIN);
+             HAL_GPIO_TogglePin(GPIOB, BSP_LED_GREEN_PIN);
              break;
 
 
         case 1u:
-             HAL_GPIO_TogglePin(GPIOF, BSP_LED2_GPIOI_PIN);
+             HAL_GPIO_TogglePin(GPIOB, BSP_LED_RED_PIN);
              break;
 
         case 2u:
-             HAL_GPIO_TogglePin(GPIOF, BSP_LED3_GPIOI_PIN);
+             HAL_GPIO_TogglePin(GPIOB, BSP_LED_GREEN_PIN);
              break;
                
                
