@@ -545,6 +545,7 @@ static void Comm_Poll(void)
             if(rx_comm_index != 0)
             {
                 vTaskDelay(pdMS_TO_TICKS(100));
+                send_flag = 1;
                 /*开始处理接收的数据 增加协议处理*/
                 Analysis_data(rx_comm_buf,rx_comm_index);
                 End_Comm();
