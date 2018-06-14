@@ -113,7 +113,7 @@ void Comm_Init(void)
     __HAL_RCC_UART4_CLK_ENABLE();
     
     huart4.Instance = UART4;
-    huart4.Init.BaudRate = 9600;
+    huart4.Init.BaudRate = 115200;
     huart4.Init.WordLength = UART_WORDLENGTH_8B;
     huart4.Init.StopBits = UART_STOPBITS_1;
     huart4.Init.Parity = UART_PARITY_NONE;
@@ -184,23 +184,12 @@ static void get_id(pDataFrame_t ppkg)
     data.srcID = ppkg->destID;
     data.head = ppkg->head;
     data.number = ppkg->number;
-    data.length = 12 + 12 + 2;  //固定12字节 + 12字节的芯片ID + 2字节的deviceid
-    uint32_t st_id[3] = {0};
-    st_id[0] = *(uint32_t*)0x1FFFF7E8 ; 
-    st_id[1] = *(uint32_t*)0x1FFFF7E8 + 4; 
-    st_id[2] = *(uint32_t*)0x1FFFF7E8 + 8; 
-    for(int i = 0 ; i < 3 ;i ++)
-    {
-        data.data[i*4] = (uint8_t)(st_id[i] >> 24);
-        data.data[i*4 + 1] = (uint8_t)(st_id[i] >> 16);
-        data.data[i*4 + 2] = (uint8_t)(st_id[i] >> 8);
-        data.data[i*4 + 3] = (uint8_t)(st_id[i] >> 0);
-    }
+    data.length = 12 + 2;  //固定12字节 + 2字节的deviceid
     Config_t temp_config ;
     if(!Get_Config(&temp_config))
     {
-        data.data[12] = (uint8_t)temp_config.deviceid;
-        data.data[13] = (uint8_t)(temp_config.deviceid >> 8);
+        data.data[0] = (uint8_t)temp_config.deviceid;
+        data.data[1] = (uint8_t)(temp_config.deviceid >> 8);
     }
     Comm_Send(&data , data.length , STATUS_TX_NOREPLY);        
 }
@@ -219,7 +208,7 @@ static void set_id(pDataFrame_t ppkg)
     Config_t temp_config ;
     if(!Get_Config(&temp_config))
     {
-        temp_config.deviceid = (ppkg->data[0] << 8) | ppkg->data[1];
+        temp_config.deviceid = (ppkg->data[1] << 8) | ppkg->data[0];
         data.data[0] = Set_Config(temp_config);
     }
     Comm_Send(&data , data.length , STATUS_TX_NOREPLY);        
@@ -520,6 +509,7 @@ static void Comm_Poll(void)
                 memcpy(temp_buf,rx_comm_buf,rx_comm_index);
                 len = rx_comm_index;
                 End_Comm();
+                send_flag = 1;
                 Analysis_data(temp_buf,len);
             }
             break;
@@ -585,7 +575,7 @@ void vTaskCommCode( void * pvParameters )
         {
             BSP_LED_Toggle (LIGHT_RED);
             send_time++;
-            if(send_time >= 10)
+            if(send_time >= 20)
             {
                 send_flag = 0;
                 BSP_LED_Off (LIGHT_RED);
