@@ -146,8 +146,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
     }
     
 }
-
-
+/*
+CC6901SO-05A  400mV/A ---->1V/2.5A
+CC6901SO-10A  200mV/A ---->1V/5A
+CC6901SO-20A  100mV/A ---->1V/10A
+*/
 static float current[3] = {0};
 void ADC_Poll(void)
 {

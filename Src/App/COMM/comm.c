@@ -39,7 +39,8 @@ enum {
 	CMD_SET_CONTFREQ,				   // 0x0035 设置控制频率
 	CMD_GET_STATUS,				   // 0x0036 查询设备运行状态
 	CMD_UP_DATA,				      // 0x0037 上报数据（不用应答）
-	CMD_RESET				         // 0x0038 复位
+	CMD_RESET	,			         // 0x0038 复位
+    CMD_ROADERR                     // 0x0039 道路封闭
 };
 
 
@@ -381,6 +382,25 @@ static void reset(pDataFrame_t ppkg)
     xSemaphoreGive( xReset_seam );
 }
 
+static void roaderr(pDataFrame_t ppkg)
+{
+    DataFrame_t data;
+    data.cmd = ppkg->cmd | 0x8000;
+    data.destID = ppkg->srcID;
+    data.srcID = ppkg->destID;
+    data.head = ppkg->head;
+    data.number = ppkg->number;
+    data.length = 12 + 1;  //固定12字节 + 成功或者失败的标志
+    data.data[0] = 1;
+    Config_t temp_config ;
+    if(!Get_Config(&temp_config))
+    {
+        temp_config.road_err = ppkg->data[0];
+        data.data[0] = Set_Config(temp_config);
+    }
+    Comm_Send(&data , data.length , STATUS_TX_NOREPLY);     
+}
+
 static void Auto_report(void)
 {
     static uint16_t pkg_num = 0;
@@ -474,6 +494,9 @@ static void Analysis_data(uint8_t* buf , uint16_t len)
         case CMD_RESET :
             reset(pkg);
         break;
+        case CMD_ROADERR :
+            roaderr(pkg);
+        break;        
         default : break;
     }
 }

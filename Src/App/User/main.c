@@ -103,9 +103,22 @@ void vTaskLoraCode( void * pvParameters )
     }
 }
 #endif
-
+/*
+0---->长灭
+1---->长亮
+2---->60次/分钟
+3---->90次/分钟
+4---->120次/分钟
+*/
 void Get_mode_from_num(uint16_t num ,Config_t config, uint8_t array[])
 {
+    if(config.road_err == 1)
+    {
+        array[0] = 0;
+        array[1] = 0;
+        array[2] = 1;
+        return ;
+    }
     if(num < config.threshold1)
     {
         array[0] = 2;
@@ -126,12 +139,29 @@ void Get_mode_from_num(uint16_t num ,Config_t config, uint8_t array[])
     }  
 }
 
+/*亮度可调，现在还没有添加*/
 void Get_value_from_light(uint32_t light_value ,Config_t config,uint8_t lamp_value[])
 {
     (void)config;
-    lamp_value[0] = 100;
-    lamp_value[1] = 100;
-    lamp_value[2] = 100;
+    if(light_value < 200)
+    {
+        lamp_value[0] = 100;
+        lamp_value[1] = 100;
+        lamp_value[2] = 100;
+    }
+    else if(light_value < 1000)
+    {
+        lamp_value[0] = 60;
+        lamp_value[1] = 60;
+        lamp_value[2] = 60;
+    }
+    else
+    {
+        lamp_value[0] = 20;
+        lamp_value[1] = 20;
+        lamp_value[2] = 20;
+    }
+        
 }
 
 static uint16_t green_mode(uint8_t array[])
@@ -197,7 +227,7 @@ void vTaskLightCode( void * pvParameters )
         /* 根据光照计算亮度值*/
         Get_value_from_light(light ,temp_config,light_value_auto);
         
-        if(((xTaskGetTickCount() - temp_config.manual_tick) > temp_config.manual_duration * 60 * 1000 ) && (temp_config.control_mode == 1))
+        if((temp_config.control_mode == 1) && ((xTaskGetTickCount() - temp_config.manual_tick) > temp_config.manual_duration * 60 * 1000 ) )
         {
             temp_config.control_mode = 0;
             Set_Config(temp_config);

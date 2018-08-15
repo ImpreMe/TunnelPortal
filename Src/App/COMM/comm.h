@@ -33,6 +33,7 @@ __packed typedef struct
     uint16_t control_period;    //自动控制的控制周期(以分钟为单位)
     uint16_t manual_duration;   //手动控制时的控制时间(以分钟为单位)
     uint32_t manual_tick;
+    uint8_t  road_err;
     uint16_t crc16;
 }Config_t;
 
